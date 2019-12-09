@@ -12,8 +12,6 @@
 * 支持自动识别并生成WEBP格式
 * 带中英文附带设置说明和示范
 
-注：横幅图片和图标来自 OSS 官网
-
 ### 更多 ###
 
 [https://www.xiaomac.com/oss-upload.html](https://www.xiaomac.com/oss-upload.html)
