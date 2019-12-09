@@ -1,0 +1,404 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: OSS Upload\n"
+"POT-Creation-Date: 2019-12-08 12:13+0800\n"
+"PO-Revision-Date: 2019-12-08 12:13+0800\n"
+"Last-Translator: Link <playes@qq.com>\n"
+"Language-Team: Link <playes@qq.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: oss-upload.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#. Plugin Name of the plugin/theme
+#: oss-upload.php:186 oss-upload.php:192 oss-upload.php:669
+msgid "OSS Upload"
+msgstr ""
+
+#: oss-upload.php:200
+msgid "Settings"
+msgstr ""
+
+#: oss-upload.php:228
+msgid "For Less"
+msgstr ""
+
+#: oss-upload.php:229
+msgid "Descriptions"
+msgstr ""
+
+#: oss-upload.php:230
+msgid "Examples"
+msgstr ""
+
+#: oss-upload.php:249
+msgid "Autosave remote images to OSS"
+msgstr ""
+
+#: oss-upload.php:531
+msgid "Aliyun Coupon <span>NEW</span>"
+msgstr ""
+
+#: oss-upload.php:532
+msgid "OSS Discount <span>HOT</span>"
+msgstr ""
+
+#: oss-upload.php:533
+msgid "Rating Stars"
+msgstr ""
+
+#: oss-upload.php:534
+msgid "Support and Help"
+msgstr ""
+
+#: oss-upload.php:535
+msgid "About Developer"
+msgstr ""
+
+#: oss-upload.php:536
+msgid "See More Plugins"
+msgstr ""
+
+#: oss-upload.php:537
+msgid "About"
+msgstr ""
+
+#: oss-upload.php:538
+msgid "Aliyun OSS"
+msgstr ""
+
+#: oss-upload.php:539
+msgid "OSS PHP SDK"
+msgstr ""
+
+#: oss-upload.php:540
+msgid "For More"
+msgstr ""
+
+#: oss-upload.php:554 oss-upload.php:593 oss-upload.php:604 oss-upload.php:621
+msgid "Starting..."
+msgstr ""
+
+#: oss-upload.php:581
+msgid "No thumbnail found"
+msgstr ""
+
+#: oss-upload.php:583
+msgid "Clean thumbnails done"
+msgstr ""
+
+#: oss-upload.php:596
+msgid "Upload local storage to OSS done"
+msgstr ""
+
+#: oss-upload.php:613
+msgid "No attachments need to be synced"
+msgstr ""
+
+#: oss-upload.php:615
+msgid "Sync missing attachments to OSS done"
+msgstr ""
+
+#: oss-upload.php:629
+msgid "Reset attachments metadata done"
+msgstr ""
+
+#: oss-upload.php:637
+msgid "Write OK, "
+msgstr ""
+
+#: oss-upload.php:640
+msgid "Read OK, "
+msgstr ""
+
+#: oss-upload.php:643
+msgid "Delete OK"
+msgstr ""
+
+#: oss-upload.php:646
+msgid "Delete Error: "
+msgstr ""
+
+#: oss-upload.php:649
+msgid "Read Error: "
+msgstr ""
+
+#: oss-upload.php:652
+msgid "Write Error: "
+msgstr ""
+
+#: oss-upload.php:676
+msgid "Enable"
+msgstr ""
+
+#: oss-upload.php:679
+msgid "Use OSS as media library storage"
+msgstr ""
+
+#: oss-upload.php:682
+msgid "Access Key"
+msgstr ""
+
+#: oss-upload.php:688
+msgid "Secret Key"
+msgstr ""
+
+#: oss-upload.php:694
+msgid "Upload Path"
+msgstr ""
+
+#: oss-upload.php:698
+msgid ""
+"<code>{BUCKET}</code> is Bucket name, <code>{PATH}</code> can be empty, with "
+"no slash at the end"
+msgstr ""
+
+#: oss-upload.php:705
+msgid "Visit URL"
+msgstr ""
+
+#: oss-upload.php:709
+msgid ""
+"<code>{BUCKET}</code> can be directory or domain, <code>{PATH}</code> can be "
+"empty"
+msgstr ""
+
+#: oss-upload.php:719
+msgid "Upload EndPoint"
+msgstr ""
+
+#: oss-upload.php:723
+msgid ""
+"Endpoint of your Bucket, can be internal address if WEB SERVER is in the "
+"same area with OSS"
+msgstr ""
+
+#: oss-upload.php:737
+msgid "Run a test"
+msgstr ""
+
+#: oss-upload.php:741
+msgid "Image Thumbnails"
+msgstr ""
+
+#: oss-upload.php:743
+msgid "Use Image Service via Parameter, default and simple"
+msgstr ""
+
+#: oss-upload.php:746
+msgid "Use Image Service via Style, powerful but require styles setting on OSS"
+msgstr ""
+
+#: oss-upload.php:751
+msgid "Use physical thumbnails, check this when having problem with theme"
+msgstr ""
+
+#: oss-upload.php:753
+msgid "Disable image thumbnails"
+msgstr ""
+
+#: oss-upload.php:756
+msgid "Media Sizes Options"
+msgstr ""
+
+#: oss-upload.php:757
+msgid "Clean Thumbnails"
+msgstr ""
+
+#: oss-upload.php:758
+msgid "Regenerate Thumbnails"
+msgstr ""
+
+#: oss-upload.php:762
+msgid "Thumbnail Quality"
+msgstr ""
+
+#: oss-upload.php:765
+msgid ""
+"Set the quality of thumbnail for OSS Image Servie to speed up image loading, "
+"the smaller the faster"
+msgstr ""
+
+#: oss-upload.php:768
+msgid "Featured Image"
+msgstr ""
+
+#: oss-upload.php:774
+msgid ""
+"Set the featured image dimensions when thumbnails enabled (width x height)"
+msgstr ""
+
+#: oss-upload.php:777
+msgid "Style Separator"
+msgstr ""
+
+#: oss-upload.php:780
+msgid "Custom style separator for OSS Image Service style"
+msgstr ""
+
+#: oss-upload.php:783
+msgid "Fullsize Style"
+msgstr ""
+
+#: oss-upload.php:787
+msgid "Default full size image style for OSS Image Service"
+msgstr ""
+
+#: oss-upload.php:790
+msgid "GIF Style"
+msgstr ""
+
+#: oss-upload.php:793
+msgid "Using special OSS Image Service style for <code>GIF</code> format"
+msgstr ""
+
+#: oss-upload.php:794
+msgid "If gif have no animation effect, check this and set extra style on OSS"
+msgstr ""
+
+#: oss-upload.php:801
+msgid "Auto Compress"
+msgstr ""
+
+#: oss-upload.php:804
+msgid "Compress as <code>WebP</code> format automatically if browser support"
+msgstr ""
+
+#: oss-upload.php:805
+msgid ""
+"Require extra style to be set on OSS when using styles for Image Service"
+msgstr ""
+
+#: oss-upload.php:808
+msgid "Lazyload"
+msgstr ""
+
+#: oss-upload.php:811
+msgid "Delay loading of images in long web pages"
+msgstr ""
+
+#: oss-upload.php:813
+msgid "Images outside of viewport wont be loaded before user scrolls to them"
+msgstr ""
+
+#: oss-upload.php:816
+msgid "Lazyload URL"
+msgstr ""
+
+#: oss-upload.php:819
+msgid ""
+"Default image url for lazyload, could be with Image Service suffix, or "
+"base64 data, or normal url. <code>{IMG}</code> means original"
+msgstr ""
+
+#: oss-upload.php:828
+msgid "Upload Mimes"
+msgstr ""
+
+#: oss-upload.php:832
+msgid "Add file extensions and mime types to the allowed upload list"
+msgstr ""
+
+#: oss-upload.php:835
+msgid "Auto Rename"
+msgstr ""
+
+#: oss-upload.php:838
+msgid "Auto rename uploaded file if having like Non-ASCII problem"
+msgstr ""
+
+#: oss-upload.php:841
+msgid "URL Fixer"
+msgstr ""
+
+#: oss-upload.php:844
+msgid "Auto relocate attachments in past posts when OSS disabled"
+msgstr ""
+
+#: oss-upload.php:847
+msgid "Find and replace whatever strings you want to fix the attachment url"
+msgstr ""
+
+#: oss-upload.php:850
+msgid "Remote Image"
+msgstr ""
+
+#: oss-upload.php:853
+msgid "Enable remote images autosave when edit post/page"
+msgstr ""
+
+#: oss-upload.php:855
+msgid "Enable remote images autosave when import post/page"
+msgstr ""
+
+#: oss-upload.php:858
+msgid "Whitelist / Blacklist rules for remote images autosave"
+msgstr ""
+
+#: oss-upload.php:861
+msgid "Local Backup"
+msgstr ""
+
+#: oss-upload.php:864
+msgid "Backup original image to local storage"
+msgstr ""
+
+#: oss-upload.php:870
+msgid "Upload Missing Attachment"
+msgstr ""
+
+#: oss-upload.php:871
+msgid "Upload Whole Local Storage"
+msgstr ""
+
+#: oss-upload.php:885
+msgid ""
+"This action would clean all thumbnails including local and OSS that filename "
+"like photo-800x600.png, cannot be undone, comfirm to process?"
+msgstr ""
+
+#: oss-upload.php:888
+msgid ""
+"This action would upload local storage directory to OSS, override if file "
+"exists, might take several minutes, comfirm to process?"
+msgstr ""
+
+#: oss-upload.php:891
+msgid ""
+"This action would upload attachment from local storage that missing in OSS, "
+"might take several minutes, comfirm to process?"
+msgstr ""
+
+#: oss-upload.php:894
+msgid ""
+"This action would regenerate metadata of all attachment in OSS, might take "
+"several minutes, comfirm to process?"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://www.xiaomac.com/oss-upload.html"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Upload with Aliyun OSS, with modified OSS Wrapper and fully native image "
+"edit function support."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Link"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://www.xiaomac.com"
+msgstr ""
