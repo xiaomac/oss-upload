@@ -1,13 +1,5 @@
 === OSS Upload ===
 
-Contributors: Link
-Donate link: https://www.xiaomac.com/about
-Tags: aliyun, oss, upload, media, files, storage, cloud, 阿里云, 媒体库, 图片, 上传, 云存储
-Tested up to: 5.3
-Stable tag: 4.8.4
-
-== Description ==
-
 使用阿里云 OSS 作为媒体库附件存储空间，支持原创增强的 OSS 协议包装和全原生图像编辑及衍生功能。
 
 ### 功能 ###
@@ -32,13 +24,8 @@ Stable tag: 4.8.4
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. See Settings -> OSS Upload
 
-== Frequently Asked Questions ==
-
-None
-
 == Screenshots ==
-
-1. Settings
+[img]screenshot-1.png[/img]
 
 == Changelog ==
 
