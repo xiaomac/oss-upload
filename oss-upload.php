@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OSS Upload
- * Version: 4.8.4
+ * Version: 4.8.5
  * Description: Upload with Aliyun OSS, with modified OSS Wrapper and fully native image edit function support.
  * Plugin URI: https://www.xiaomac.com/oss-upload.html
  * Author: Link
@@ -94,10 +94,10 @@ function oss_upload_handle_upload_prefilter($file){
     $newname = oss_upload_rename(oss_upload_encode($file['name']));
     $newname = wp_unique_filename($upload['default']['path'], $newname);
     $file['name'] = wp_unique_filename($upload['path'], $newname);
-    if(isset($file['size']) && $file['size'] >= 1024*1024){//upload via file
-        remove_filter('upload_dir', 'oss_upload_dir');
-    }else if(ouops('oss_backup')){//upload via stream
-        @copy($file['tmp_name'], $upload['default']['path'].'/'.$file['name']);
+    if(isset($file['size']) && $file['size'] >= 1024*1024*2 && (stripos($file['type'],'image')!==0 || !ouops('oss_service',10))){
+        remove_filter('upload_dir', 'oss_upload_dir');//upload via file
+    }else if(ouops('oss_backup')){
+        @copy($file['tmp_name'], $upload['default']['path'].'/'.$file['name']);//upload via stream
     }
     return $file;
 }
@@ -172,6 +172,9 @@ add_action('admin_init', 'oss_upload_admin_init', 1);
 function oss_upload_admin_init() {
     register_setting('oss_upload_admin_options_group', 'ouop');
     if(!ouops('oss')) return;
+    if(isset($_GET['page'], $_GET['action']) && $_GET['page'] == 'oss-upload'){
+        oss_upload_admin_action();
+    }
     add_filter('big_image_size_threshold', '__return_false');//kiss my ass...
     add_filter('wp_privacy_exports_dir', 'oss_upload_privacy_exports_dir');
     add_filter('wp_privacy_exports_url', 'oss_upload_privacy_exports_url');
@@ -357,26 +360,16 @@ function oss_upload_attachment_metadata($data, $id){
     $service = ouops('oss_service');
     if($service == 10) return $data;
     if($service == 2 || (ouops('oss_lazyload') && !is_admin())) $data['sizes'] = array();
-    $ouss = ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style/';
+    $ouss = ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style%2F';
     $ext = wp_check_filetype(oss_upload_basename($data['file']));
     $gif = $ext && $ext['ext'] == 'gif' ? 1 : 0;
     $quality = ouops('oss_quality') ? intval(ouops('oss_quality')) : '50';
-    $quality = $gif ? '' : '/quality,q_'.$quality;
+    $quality = $gif ? '' : '%2Fquality,q_'.$quality;
     foreach ($data['sizes'] as $k => $v){
         if(!isset($v['file'])) continue;
-        $postfix = $service ? "{$ouss}{$k}" : "?x-oss-process=image{$quality}/resize,m_fill,w_{$v['width']},h_{$v['height']}";
-        if($gif && $service && ouops('oss_gif')) $postfix = "{$ouss}gif";
+        if($gif && $service && ouops('oss_gif')) continue;
+        $postfix = $service ? "{$ouss}{$k}" : "?x-oss-process=image{$quality}%2Fresize,m_fill,w_{$v['width']},h_{$v['height']}";
         $data['sizes'][$k]['file'] = oss_upload_basename($data['file']).$postfix;
-    }
-    return $data;
-}
-
-add_filter('wp_prepare_attachment_for_js', 'oss_upload_prepare_attachment');
-function oss_upload_prepare_attachment($data){
-    if(!ouops('oss_service',1)) return $data;
-    $ouss = ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style/';
-    foreach ($data['sizes'] as $k => $v){
-        $data['sizes'][$k]['url'] = str_replace($data['filename'].$ouss.$data['filename'], $data['filename'], $data['sizes'][$k]['url']);
     }
     return $data;
 }
@@ -393,7 +386,7 @@ function oss_upload_image_srcset($sources, $size, $image_src, $meta, $id){//wp_g
         $url = oss_upload_url_fixer($url);
         if(oss_upload_basename($meta['file']) == wp_basename($url)){//original
             if(ouops('oss_service',1) || ouops('oss_fullsize_style')){//style
-                $ouss = ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style/';
+                $ouss = ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style%2F';
                 $full = ouops('oss_fullsize_style') ? trim(ouops('oss_fullsize_style')) : 'full';
                 $url .= $ouss.$full;
             }
@@ -413,11 +406,11 @@ function oss_upload_attachment_url($url, $id){
     if(ouops('oss_service',10)) return $url;
     $ext = wp_check_filetype(oss_upload_basename($url));
     if(!$ext || !in_array($ext['ext'], array('bmp','gif','png','jpg','jpe','jpeg'))) return $url;
+    if($ext && $ext['ext'] == 'gif' && ouops('oss_gif')) return $url;
     if(ouops('oss_service',1) || ouops('oss_fullsize_style')){//style
-        $ouss = ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style/';
+        $ouss = ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style%2F';
         $full = ouops('oss_fullsize_style') ? trim(ouops('oss_fullsize_style')) : 'full';
         $url .= $ouss.$full;
-        if($ext && $ext['ext'] == 'gif' && ouops('oss_gif')) return $url.'_gif';
     }
     if(!is_admin()) $url = oss_upload_auto_webp($url);
     return $url;
@@ -435,7 +428,7 @@ function oss_upload_attached_file($file, $id){
 }
 
 function oss_upload_auto_webp($img, $lazyload=false){
-    if(!ouops('oss') || ouops('oss_service',10)) return $img;
+    if(!ouops('oss') || ouops('oss_service',1) || ouops('oss_service',10)) return $img;
     if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/spider|bot/i', $_SERVER['HTTP_USER_AGENT'])) return $img;
     $upload = wp_get_upload_dir();
     $default = substr($upload['default']['baseurl'], stripos($upload['default']['baseurl'], '//'));
@@ -444,22 +437,18 @@ function oss_upload_auto_webp($img, $lazyload=false){
     if(empty($img) || stripos($img, $baseurl) === false) return $img;
     $ouis = $lazy = $pos = '';
     if(stripos($img, '#')) $img = substr($img, 0, strripos($img, '#'));
-    if((ouops('oss_default_style') && ($pos = stripos($img, trim(ouops('oss_default_style')))))
-        || (ouops('oss_style_separator') && ($pos = stripos($img, trim(ouops('oss_style_separator')))))
-        || ($pos = stripos($img, '?x-oss-process=style/'))){
-        $ouis = '_webp';
-    }else if($pos = stripos($img, '?x-oss-process=image/')){
-        $ouis = '/format,webp';
+    if($pos = stripos($img, '?x-oss-process=image')){
+        $ouis = '%2Fformat,webp';
     }else if(!stripos($img, '?')){
-        $ouis = '?x-oss-process=image/format,webp';
+        $ouis = '?x-oss-process=image%2Fformat,webp';
     }
     if($lazyload && !is_feed() && !wp_doing_ajax()){
         $lazy = empty($pos) ? $img : substr($img, 0, $pos);
         if($lazyurl = ouops('oss_lazyurl')){
             $lazy = str_replace('{IMG}', $lazy, $lazyurl);
         }else{
-            $lazy .= '?x-oss-process=image/quality,q_10/resize,m_lfit,w_20';
-            if(oss_upload_webp()) $lazy .= '/format,webp';
+            $lazy .= '?x-oss-process=image%2Fquality,q_10%2Fresize,m_lfit,w_20';
+            if(oss_upload_webp()) $lazy .= '%2Fformat,webp';
         }
     }
     if(oss_upload_webp() && !empty($ouis) && !stripos($img, $ouis)) $img .= $ouis;
@@ -552,122 +541,132 @@ add_action('admin_notices', 'oss_upload_admin_note');
 function oss_upload_admin_note(){
     $screen = get_current_screen();
     if($screen->id != 'settings_page_oss-upload' || !ouops('oss') || !is_super_admin()) return;
-    if(isset($_GET['settings-updated'])){
-        @set_time_limit(0);
-        $ok = false;
-        $index = 1;
-        if($_GET['settings-updated'] == 'clean'){
-            $upload = wp_get_upload_dir();
-            try{
-                $out = __('Starting...', 'oss-upload')."<br/>\n";
-                $files = get_posts(array('post_type'=>'attachment', 'posts_per_page'=>-1));
-                $paths = array();
-                foreach ($files as $file){
-                    $path = pathinfo(get_attached_file($file->ID), 1);
-                    if(!in_array($path, $paths)) $paths[] = $path;
-                    if(isset($_GET['force'])){
-                        $path = pathinfo(get_attached_file($file->ID, 1), 1);
-                        if(!in_array($path, $paths)) $paths[] = $path;
-                    }
-                    if($arr = oss_upload_delete_thumbnail($file->ID)){
-                        foreach ($arr as $v){
-                            $out .= $index++.". {$v} deleted<br/>\n";
-                        }
-                    }
-                }
-                foreach ($paths as $path){
-                    $imgs = oss_upload_readdir($path);
-                    foreach ($imgs as $img) {
-                        if(preg_match('/\-[0-9]+x[0-9]+\./', $img) && file_is_valid_image($img)){
-                            if(@file_exists($img) && @unlink($img)){
-                                $out .= $index++.". {$img} deleted<br/>\n";
-                            }
-                        }
-                    }
-                }
-                if($index == 1){
-                    $out = __('No thumbnail found','oss-upload');
-                }else{
-                    $out .= __('Clean thumbnails done','oss-upload');
-                    $ok = true;
-                }
-            }catch(Exception $ex){
-                $out = $ex->getMessage();
-            }
-        }else if($_GET['settings-updated'] == 'upload'){
-            $upload = wp_get_upload_dir();
-            $basedir = explode('/', substr($upload['basedir'].'/', 6), 2);
-            try{
-                $out = __('Starting...', 'oss-upload')."<br/>\n";
-                $ossw = new OU_ALIOSS;
-                $out .= $ossw->create_mtu_object_by_dir($basedir[0], $upload['default']['basedir'], true);
-                $out .= __('Upload local storage to OSS done', 'oss-upload');
-                $ok = true;
-            }catch(Exception $ex){
-                $out = $ex->getMessage();
-            }
-        }else if($_GET['settings-updated'] == 'sync'){
-            $files = get_posts(array('post_type'=>'attachment', 'posts_per_page'=>-1));
-            $upload = wp_get_upload_dir();
-            $out = __('Starting...', 'oss-upload')."<br/>\n";
-            foreach ($files as $file){
-                $oss = get_attached_file($file->ID);
-                $local = str_replace($upload['basedir'], $upload['default']['basedir'], $oss);
-                if(@file_exists($local) && !@file_exists($oss) && ($done = oss_upload_handler($local))){
-                    $out .= $index++.". {$done} synced<br/>\n";
-                }
-            }
-            if($index == 1){
-                $out = __('No attachments need to be synced','oss-upload');
-            }else{
-                $out .= __('Sync missing attachments to OSS done','oss-upload');
-                $ok = true;
-            }
-        }else if($_GET['settings-updated'] == 'reset'){
-            @ini_set('memory_limit','2048M');
-            $files = get_posts(array('post_type'=>'attachment', 'posts_per_page'=>-1));
-            $out = __('Starting...', 'oss-upload')."<br/>\n";
-            foreach ($files as $file){
-                if(!wp_attachment_is_image($file->ID)) continue;
-                $img = get_attached_file($file->ID);
-                $metadata = wp_generate_attachment_metadata($file->ID, $img);
-                wp_update_attachment_metadata($file->ID, $metadata);
-                $out .= $index++.". {$file->ID} {$img} reset<br/>\n";
-            }
-            $out .= __('Reset attachments metadata done','oss-upload');
-            $ok = true;
-        }else if($_GET['settings-updated'] == 'test'){
-            try{
-                $rnd = md5(time());
-                $file = ouops('oss_path').'/oss_upload_'.$rnd.'.txt';
-                $try = file_put_contents($file, $rnd);
-                if($try == strlen($rnd)){
-                    $out = __('Write OK, ','oss-upload');
-                    $try = file_get_contents($file);
-                    if($try == $rnd){
-                        $out .= __('Read OK, ', 'oss-upload');
-                        $try = unlink($file);
-                        if($try === true){
-                            $out .= __('Delete OK', 'oss-upload');
-                            $ok = true;
-                        }else{
-                            throw new RequestCore_Exception($out . __('Delete Error: ', 'oss-upload') . $try);
-                        }
+    if(isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'test'){
+        try{
+            $rnd = md5(time());
+            $file = ouops('oss_path').'/oss_upload_'.$rnd.'.txt';
+            $try = file_put_contents($file, $rnd);
+            if($try == strlen($rnd)){
+                $out = __('Write OK, ','oss-upload');
+                $try = file_get_contents($file);
+                if($try == $rnd){
+                    $out .= __('Read OK, ', 'oss-upload');
+                    $try = unlink($file);
+                    if($try === true){
+                        $out .= __('Delete OK', 'oss-upload');
+                        $ok = true;
                     }else{
-                        throw new RequestCore_Exception($out . __('Read Error: ', 'oss-upload') . $try);
+                        throw new RequestCore_Exception($out . __('Delete Error: ', 'oss-upload') . $try);
                     }
                 }else{
-                    throw new RequestCore_Exception($out . __('Write Error: ', 'oss-upload') . $try);
+                    throw new RequestCore_Exception($out . __('Read Error: ', 'oss-upload') . $try);
                 }
-            }catch(Exception $ex){
-                $out = esc_html($ex->message);
+            }else{
+                throw new RequestCore_Exception($out . __('Write Error: ', 'oss-upload') . $try);
             }
+        }catch(Exception $ex){
+            $out = esc_html($ex->message);
         }
         if(isset($out)) echo '<div class="'. ($ok ? 'updated fade' : 'error') . '"><p>'.$out.'</p></div>';
     }
     if(isset($_SESSION['oss_upload_error'])){
         echo '<div class="error"><p>'.$_SESSION['oss_upload_error'].'</p></div>';
     }
+}
+
+function oss_upload_admin_action(){
+    if(!$action = $_GET['action'] || !is_super_admin()) return;
+    @set_time_limit(0);
+    ob_end_clean();
+    echo str_pad('',1024);
+    echo '<title>'.__('OSS Upload','oss-upload').'</title>';
+    echo "<h1>".__('Starting...', 'oss-upload')."</h1>\n";
+    flush();
+    $index = 1;
+    $upload = wp_get_upload_dir();
+    if($action == 'clean'){
+        try{
+            $files = get_posts(array('post_type'=>'attachment', 'posts_per_page'=>-1));
+            $postfix = __('deleted', 'oss-upload');
+            $paths = array();
+            foreach ($files as $file){
+                $path = pathinfo(get_attached_file($file->ID), 1);
+                if(!in_array($path, $paths)) $paths[] = $path;
+                if(isset($_GET['force'])){
+                    $path = pathinfo(get_attached_file($file->ID, 1), 1);
+                    if(!in_array($path, $paths)) $paths[] = $path;
+                }
+                if($arr = oss_upload_delete_thumbnail($file->ID)){
+                    foreach ($arr as $v){
+                        echo $index++.". {$v} {$postfix}<br/>\n";
+                        flush();
+                    }
+                }
+            }
+            foreach ($paths as $path){
+                $imgs = oss_upload_readdir($path);
+                foreach ($imgs as $img) {
+                    if(preg_match('/\-[0-9]+x[0-9]+\./', $img) && file_is_valid_image($img)){
+                        if(@file_exists($img) && @unlink($img)){
+                            echo $index++.". {$img} {$postfix}<br/>\n";
+                            flush();
+                        }
+                    }
+                }
+            }
+            if($index == 1){
+                echo __('No thumbnail found','oss-upload');
+            }else{
+                echo '<br/><hr/>';
+                echo __('Clean thumbnails done','oss-upload');
+            }
+        }catch(Exception $ex){
+            echo $ex->getMessage();
+        }
+    }else if($action == 'upload'){
+        $basedir = explode('/', substr($upload['basedir'].'/', 6), 2);
+        try{
+            $ossw = new OU_ALIOSS;
+            $ossw->create_mtu_object_by_dir($basedir[0], $upload['default']['basedir'], true);
+            echo '<br/><hr/>';
+            echo __('Upload local storage to OSS done', 'oss-upload');
+        }catch(Exception $ex){
+            echo $ex->getMessage();
+        }
+    }else if($action == 'sync'){
+        $files = get_posts(array('post_type'=>'attachment', 'posts_per_page'=>-1));
+        $postfix = __('synced', 'oss-upload');
+        foreach ($files as $file){
+            $oss = get_attached_file($file->ID);
+            $local = str_replace($upload['basedir'], $upload['default']['basedir'], $oss);
+            if(@file_exists($local) && !@file_exists($oss) && ($done = oss_upload_handler($local))){
+                echo $index++.". {$done} {$postfix}<br/>\n";
+                flush();
+            }
+        }
+        if($index == 1){
+            echo __('No attachments need to be synced','oss-upload');
+        }else{
+            echo '<br/><hr/>';
+            echo __('Sync missing attachments to OSS done','oss-upload');
+        }
+    }else if($action == 'reset'){
+        @ini_set('memory_limit','2048M');
+        $files = get_posts(array('post_type'=>'attachment', 'posts_per_page'=>-1));
+        $postfix = __('reset', 'oss-upload');
+        foreach ($files as $file){
+            if(!wp_attachment_is_image($file->ID)) continue;
+            $img = get_attached_file($file->ID);
+            $metadata = wp_generate_attachment_metadata($file->ID, $img);
+            wp_update_attachment_metadata($file->ID, $metadata);
+            echo $index++.". {$file->ID} {$img} {$postfix}<br/>\n";
+            flush();
+            echo '<br/><hr/>';
+        }
+        echo __('Reset attachments metadata done','oss-upload');
+    }
+    flush();
+    exit();
 }
 
 function oss_upload_options_page(){
@@ -750,10 +749,10 @@ function oss_upload_options_page(){
         <td>
             <p><label><input name="ouop[oss_service]" type="radio" value="0" <?php checked(ouops('oss_service'),0);?> /> <?php _e('Use Image Service via Parameter, default and simple','oss-upload')?></label>
             <?php echo oss_upload_link('//help.aliyun.com/document_detail/44688.html', '?', 'blank'); ?></p>
-            <p <?php oss_upload_show_more('oss_upload_example'); ?>><small><code>photo.jpg?x-oss-process=image/quality,q_<?php echo ouops('oss_quality') ? intval(ouops('oss_quality')) : '50'; ?>/resize,m_fill,w_{width},h_{height}</code></small></p><br/>
+            <p <?php oss_upload_show_more('oss_upload_example'); ?>><small><code>photo.jpg?x-oss-process=image%2Fquality,q_<?php echo ouops('oss_quality') ? intval(ouops('oss_quality')) : '50'; ?>%2Fresize,m_fill,w_{width},h_{height}</code></small></p><br/>
             <p><label><input name="ouop[oss_service]" type="radio" value="1" <?php checked(ouops('oss_service'),1);?> /> <?php _e('Use Image Service via Style, powerful but require styles setting on OSS','oss-upload')?></label>
             <?php echo oss_upload_link('//help.aliyun.com/document_detail/44687.html', '?', 'blank'); ?></p>
-            <p <?php oss_upload_show_more('oss_upload_example'); ?>><small><code>photo.jpg<?php echo ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style/'; ?>{style}</code>:
+            <p <?php oss_upload_show_more('oss_upload_example'); ?>><small><code>photo.jpg<?php echo ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style%2F'; ?>{style}</code>:
             <?php foreach (get_intermediate_image_sizes() as $v){ echo '<code>'.$v.'</code> '; } ?>
             </small></p><br/>
             <p><label><input name="ouop[oss_service]" type="radio" value="10" <?php checked(ouops('oss_service'),10);?> /> <?php _e('Use physical thumbnails, check this when having problem with theme','oss-upload')?></label></p>
@@ -762,8 +761,8 @@ function oss_upload_options_page(){
             <p <?php oss_upload_show_more('oss_upload_example'); ?>><small><code>photo.jpg</code></small></p><br/>
             <p><?php 
                 echo oss_upload_link('options-media.php', __('Media Sizes Options', 'oss-upload'), 'button');
-                echo oss_upload_link('?page=oss-upload&settings-updated=clean', __('Clean Thumbnails', 'oss-upload'), 'button');
-                if(!ouops('oss_service',2)) echo oss_upload_link('?page=oss-upload&settings-updated=reset', __('Regenerate Thumbnails', 'oss-upload'), 'button');
+                echo oss_upload_link('?page=oss-upload&action=clean', __('Clean Thumbnails', 'oss-upload'), 'button,blank');
+                if(!ouops('oss_service',2)) echo oss_upload_link('?page=oss-upload&action=reset', __('Regenerate Thumbnails', 'oss-upload'), 'button,blank');
             ?></p>
         </td></tr>
         <tr valign="top">
@@ -785,24 +784,21 @@ function oss_upload_options_page(){
         <th scope="row"><?php _e('Style Separator', 'oss-upload')?></th>
         <td>
             <p><label><input type="text" name="ouop[oss_style_separator]" size="60" value="<?php echo ouops('oss_style_separator')?>" /> <?php echo oss_upload_link('//help.aliyun.com/document_detail/48884.html', '?', 'blank'); ?></label></p>
-            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Custom style separator for OSS Image Service style','oss-upload')?>: <code>?x-oss-process=style/</code> <code>-</code> <code>_</code> <code>/</code> <code>!</code></small></p>
+            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Custom style separator for OSS Image Service style','oss-upload')?>: <code>?x-oss-process=style%2F</code> <code>-</code> <code>_</code> <code>!</code></small></p>
         </td></tr>
         <tr valign="top">
         <th scope="row"><?php _e('Fullsize Style', 'oss-upload')?></th>
         <td>
             <p><label><input type="text" name="ouop[oss_fullsize_style]" size="60" value="<?php echo ouops('oss_fullsize_style')?>" />
             <?php echo oss_upload_link('//help.aliyun.com/document_detail/44686.html', '?', 'blank'); ?></label></p>
-            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Default full size image style for OSS Image Service','oss-upload')?>: <code>{default}</code></small></p>
+            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Default full size image style for OSS Image Service','oss-upload')?>: <code>full</code></small></p>
         </td></tr>
         <tr valign="top">
         <th scope="row"><?php _e('GIF Style', 'oss-upload')?></th>
         <td>
             <p><label><input name="ouop[oss_gif]" type="checkbox" value="1" <?php checked(ouops('oss_gif'),1);?> />
             <?php _e('Using special OSS Image Service style for <code>GIF</code> format','oss-upload')?> <?php echo oss_upload_link('//help.aliyun.com/document_detail/44957.html', '?', 'blank'); ?></label></p>
-            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('If gif have no animation effect, check this and set extra style on OSS','oss-upload')?>: <code>{gif}</code> 
-                <?php if(ouops('oss_fullsize_style')):?>
-                    <code>{default_gif}</code>
-                <?php endif;?>
+            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Check this to skip style for GIF image if having no animation effect','oss-upload')?> 
             </small></p>
         </td></tr>
         <tr valign="top">
@@ -810,7 +806,7 @@ function oss_upload_options_page(){
         <td>
             <p><label><input name="ouop[oss_webp]" type="checkbox" value="1" <?php checked(ouops('oss_webp'),1);?> />
             <?php _e('Compress as <code>WebP</code> format automatically if browser support','oss-upload')?> <?php echo oss_upload_link('//help.aliyun.com/document_detail/44703.html', '?', 'blank'); ?></label></p>
-            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Require extra style to be set on OSS when using styles for Image Service','oss-upload')?>: <code>{style}_webp</code></small></p>
+            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Choose webp format on OSS if using styles for Image Service','oss-upload')?></small></p>
         </td></tr>
         <tr valign="top">
         <th scope="row"><?php _e('Lazyload', 'oss-upload')?></th>
@@ -826,8 +822,8 @@ function oss_upload_options_page(){
             <p><label><input type="text" name="ouop[oss_lazyurl]" size="60" value="<?php echo ouops('oss_lazyurl')?>" /></label></p>
             <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Default image url for lazyload, could be with Image Service suffix, or base64 data, or normal url. <code>{IMG}</code> means original','oss-upload')?></small></p>
             <div <?php oss_upload_show_more('oss_upload_example'); ?>>
-            <p><small><code>{IMG}?x-oss-process=image/quality,q_10/resize,m_lfit,w_20</code></small></p>
-            <p><small><code>{IMG}<?php echo ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style/'; ?>lazyload-style</code></small></p>
+            <p><small><code>{IMG}?x-oss-process=image%2Fquality,q_10%2Fresize,m_lfit,w_20</code></small></p>
+            <p><small><code>{IMG}<?php echo ouops('oss_style_separator') ? trim(ouops('oss_style_separator')) : '?x-oss-process=style%2F'; ?>lazyload-style</code></small></p>
             <p><small><code>data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=</code></small></p>
             <p><small><code>//img.domain.com/xxx/lazyload.png</code></small></p>
             </div>
@@ -875,8 +871,8 @@ function oss_upload_options_page(){
             ?>
             </code></small></label></p><br />
             <?php
-                echo oss_upload_link('?page=oss-upload&settings-updated=sync', __('Upload Missing Attachment', 'oss-upload'), 'button');
-                echo oss_upload_link('?page=oss-upload&settings-updated=upload', __('Upload Whole Local Storage', 'oss-upload'), 'button');
+                echo oss_upload_link('?page=oss-upload&action=sync', __('Upload Missing Attachment', 'oss-upload'), 'button,blank');
+                echo oss_upload_link('?page=oss-upload&action=upload', __('Upload Whole Local Storage', 'oss-upload'), 'button,blank');
             ?>
         </td></tr>
         </table>
@@ -889,16 +885,16 @@ function oss_upload_options_page(){
             jQuery('.form-table :input:lt(6):gt(2)').blur(function(){
                 if(jQuery(this).val().indexOf(jQuery(this).attr('placeholder').substr(0,4))!=0) jQuery(this).val('');
             });
-            jQuery('a[href*="settings-updated=clean"]').click(function(){
+            jQuery('a[href*="action=clean"]').click(function(){
                 return confirm("<?php _e('This action would clean all thumbnails including local and OSS that filename like photo-800x600.png, cannot be undone, comfirm to process?','oss-upload');?>");
             });
-            jQuery('a[href*="settings-updated=upload"]').click(function(){
+            jQuery('a[href*="action=upload"]').click(function(){
                 return confirm("<?php _e('This action would upload local storage directory to OSS, override if file exists, might take several minutes, comfirm to process?','oss-upload');?>");
             });
-            jQuery('a[href*="settings-updated=sync"]').click(function(){
+            jQuery('a[href*="action=sync"]').click(function(){
                 return confirm("<?php _e('This action would upload attachment from local storage that missing in OSS, might take several minutes, comfirm to process?','oss-upload');?>");
             });
-            jQuery('a[href*="settings-updated=reset"]').click(function(){
+            jQuery('a[href*="action=reset"]').click(function(){
                 return confirm("<?php _e('This action would regenerate metadata of all attachment in OSS, might take several minutes, comfirm to process?','oss-upload');?>");
             });
         </script>

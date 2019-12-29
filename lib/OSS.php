@@ -1160,47 +1160,46 @@ class OU_ALIOSS{
         $this->precheck_common($bucket, NULL, $options, false);
         //Windows系统下进行转码
         $dir = OSSUtil::encoding_path($dir);
-        //判断是否目录
-        if(!is_dir($dir)){
-            throw new OSS_Exception($dir.' is not a directory, please check it');
-        }
-
+        if(!is_dir($dir)) throw new OSS_Exception($dir.' 并非目录，请确认。');
         $file_list_array = $this->read_dir($dir, $exclude, $recursive);
+        if(empty($file_list_array)) throw new OSS_Exception($dir.' 目录为空。');
 
-
-        if(empty($file_list_array)){
-            throw new OSS_Exception($dir.' is empty.');
-        }
-
-        $is_upload_ok = '';
         $index = 1;
-
         $upload = oss_upload_dir(wp_get_upload_dir());
         $basedir = explode('/', substr($upload['basedir'].'/', 6), 2);
 
         foreach ($file_list_array as $k=>$item){
-            $is_upload_ok .= $index++.". ";
-            $is_upload_ok .= "Syncing file ".$item['path']." ";
+            echo $index++.". ".$item['path']." - ";
             if (is_dir($item['path'])) {
-                $is_upload_ok .= " skipped as directory.<br/>\n";
-            }
-            else {
+                echo "忽略目录。<br/>\n";
+                flush();
+            }else{
                 $options = array(
                     self::OSS_FILE_UPLOAD => $item['path'],
                     self::OSS_PART_SIZE => self::OSS_MIN_PART_SIZE,
-                );          
-
+                );
+                $ossFile = "oss://{$bucket}/{$basedir[1]}".rawurlencode($item['file']);
+                if(file_exists($ossFile)){//检查文件是否相同，是则跳过，这样可以多次重复执行该功能
+                    $info_ = self::get_object_meta($bucket, $basedir[1].$item['file']);
+                    $ossMd5 = isset($info_->header['content-md5']) ? $info_->header['content-md5'] : false;
+                    $ossLen = isset($info_->header['content-length']) ? $info_->header['content-length'] : false;
+                    if(($ossLen && $ossLen==filesize($item['path'])) || ($ossMd5 && $ossMd5==base64_encode(md5_file($item['path'], true)))){
+                        echo "<font color=gray>已存在。</font><br/>\n";
+                        flush();
+                        continue;
+                    }
+                }
                 $response = $this->create_mpu_object($bucket, $basedir[1].$item['file'], $options);
                 if($response->isOK()){
-                    $is_upload_ok .= " successful.<br/>\n";
-                } 
-                else {
-                    $is_upload_ok .= " failed.<br/>\n";
-                    continue;
+                    echo "<font color=green>上传成功。</font><br/>\n";
+                    flush();
+                }else {
+                    echo "<font color=red>上传失败。</font><br/>\n";
+                    flush();
                 }
             }
         }
-        return $is_upload_ok;
+        return true;
     }
 
     /**

@@ -33,6 +33,7 @@ final class OSSWrapper extends OU_ALIOSS {
 				);
 			}
 		}
+		clearstatcache();
 		return $return;
 	}
 	public function unlink($path) {
