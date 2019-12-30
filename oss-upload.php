@@ -575,7 +575,7 @@ function oss_upload_admin_note(){
 }
 
 function oss_upload_admin_action(){
-    if(!$action = $_GET['action'] || !is_super_admin()) return;
+    if(!($action = $_GET['action']) || !is_super_admin()) return;
     @set_time_limit(0);
     ob_end_clean();
     echo str_pad('',1024);
@@ -604,7 +604,9 @@ function oss_upload_admin_action(){
                 }
             }
             foreach ($paths as $path){
+                if(empty($path)) continue;
                 $imgs = oss_upload_readdir($path);
+                if(empty($imgs)) continue;
                 foreach ($imgs as $img) {
                     if(preg_match('/\-[0-9]+x[0-9]+\./', $img) && file_is_valid_image($img)){
                         if(@file_exists($img) && @unlink($img)){
