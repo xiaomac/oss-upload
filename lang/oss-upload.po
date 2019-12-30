@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OSS Upload\n"
-"POT-Creation-Date: 2019-12-30 00:13+0800\n"
-"PO-Revision-Date: 2019-12-30 00:13+0800\n"
+"POT-Creation-Date: 2019-12-30 13:35+0800\n"
+"PO-Revision-Date: 2019-12-30 13:35+0800\n"
 "Last-Translator: Link <playes@qq.com>\n"
 "Language-Team: Link <playes@qq.com>\n"
 "Language: en_US\n"
@@ -21,376 +21,391 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
 #. Plugin Name of the plugin/theme
-#: oss-upload.php:185 oss-upload.php:191 oss-upload.php:582 oss-upload.php:676
+#: oss-upload.php:183 oss-upload.php:189 oss-upload.php:594 oss-upload.php:690
 msgid "OSS Upload"
 msgstr ""
 
-#: oss-upload.php:199
+#: oss-upload.php:197
 msgid "Settings"
 msgstr ""
 
-#: oss-upload.php:227
+#: oss-upload.php:225
 msgid "For Less"
 msgstr ""
 
-#: oss-upload.php:228
+#: oss-upload.php:226
 msgid "Descriptions"
 msgstr ""
 
-#: oss-upload.php:229
+#: oss-upload.php:227
 msgid "Examples"
 msgstr ""
 
-#: oss-upload.php:248
+#: oss-upload.php:246
 msgid "Autosave remote images to OSS"
 msgstr ""
 
-#: oss-upload.php:527
+#: oss-upload.php:539
 msgid "Aliyun Coupon <span>NEW</span>"
 msgstr ""
 
-#: oss-upload.php:528
+#: oss-upload.php:540
 msgid "OSS Discount <span>HOT</span>"
 msgstr ""
 
-#: oss-upload.php:529
+#: oss-upload.php:541
 msgid "Rating Stars"
 msgstr ""
 
-#: oss-upload.php:530
+#: oss-upload.php:542
 msgid "Support and Help"
 msgstr ""
 
-#: oss-upload.php:531
+#: oss-upload.php:543
 msgid "About Developer"
 msgstr ""
 
-#: oss-upload.php:532
+#: oss-upload.php:544
 msgid "See More Plugins"
 msgstr ""
 
-#: oss-upload.php:533
+#: oss-upload.php:545
 msgid "About"
 msgstr ""
 
-#: oss-upload.php:534
+#: oss-upload.php:546
 msgid "Aliyun OSS"
 msgstr ""
 
-#: oss-upload.php:535
+#: oss-upload.php:547
 msgid "OSS PHP SDK"
 msgstr ""
 
-#: oss-upload.php:536
+#: oss-upload.php:548
 msgid "For More"
 msgstr ""
 
-#: oss-upload.php:550
+#: oss-upload.php:562
 msgid "Write OK, "
 msgstr ""
 
-#: oss-upload.php:553
+#: oss-upload.php:565
 msgid "Read OK, "
 msgstr ""
 
-#: oss-upload.php:556
+#: oss-upload.php:568
 msgid "Delete OK"
 msgstr ""
 
-#: oss-upload.php:559
+#: oss-upload.php:571
 msgid "Delete Error: "
 msgstr ""
 
-#: oss-upload.php:562
+#: oss-upload.php:574
 msgid "Read Error: "
 msgstr ""
 
-#: oss-upload.php:565
+#: oss-upload.php:577
 msgid "Write Error: "
 msgstr ""
 
-#: oss-upload.php:583
+#: oss-upload.php:595
 msgid "Starting..."
 msgstr ""
 
-#: oss-upload.php:590
+#: oss-upload.php:602
 msgid "deleted"
 msgstr ""
 
-#: oss-upload.php:618
+#: oss-upload.php:632
 msgid "No thumbnail found"
 msgstr ""
 
-#: oss-upload.php:621
+#: oss-upload.php:635
 msgid "Clean thumbnails done"
 msgstr ""
 
-#: oss-upload.php:632
+#: oss-upload.php:646
 msgid "Upload local storage to OSS done"
 msgstr ""
 
-#: oss-upload.php:638
+#: oss-upload.php:652
 msgid "synced"
 msgstr ""
 
-#: oss-upload.php:648
+#: oss-upload.php:662
 msgid "No attachments need to be synced"
 msgstr ""
 
-#: oss-upload.php:651
+#: oss-upload.php:665
 msgid "Sync missing attachments to OSS done"
 msgstr ""
 
-#: oss-upload.php:656
+#: oss-upload.php:670
 msgid "reset"
 msgstr ""
 
-#: oss-upload.php:666
+#: oss-upload.php:680
 msgid "Reset attachments metadata done"
 msgstr ""
 
-#: oss-upload.php:683
+#: oss-upload.php:697
 msgid "Enable"
 msgstr ""
 
-#: oss-upload.php:686
+#: oss-upload.php:700
 msgid "Use OSS as media library storage"
 msgstr ""
 
-#: oss-upload.php:689
+#: oss-upload.php:703
 msgid "Access Key"
 msgstr ""
 
-#: oss-upload.php:695
+#: oss-upload.php:709
 msgid "Secret Key"
 msgstr ""
 
-#: oss-upload.php:701
+#: oss-upload.php:715
 msgid "Upload Path"
 msgstr ""
 
-#: oss-upload.php:705
+#: oss-upload.php:719
 msgid ""
 "<code>{BUCKET}</code> is Bucket name, <code>{PATH}</code> can be empty, with "
 "no slash at the end"
 msgstr ""
 
-#: oss-upload.php:712
+#: oss-upload.php:726
 msgid "Visit URL"
 msgstr ""
 
-#: oss-upload.php:716
+#: oss-upload.php:730
 msgid ""
 "<code>{BUCKET}</code> can be directory or domain, <code>{PATH}</code> can be "
 "empty"
 msgstr ""
 
-#: oss-upload.php:726
+#: oss-upload.php:740
 msgid "Upload EndPoint"
 msgstr ""
 
-#: oss-upload.php:730
+#: oss-upload.php:744
 msgid ""
 "Endpoint of your Bucket, can be internal address if WEB SERVER is in the "
 "same area with OSS"
 msgstr ""
 
-#: oss-upload.php:744
+#: oss-upload.php:758
 msgid "Run a test"
 msgstr ""
 
-#: oss-upload.php:748
+#: oss-upload.php:762
 msgid "Image Thumbnails"
 msgstr ""
 
-#: oss-upload.php:750
+#: oss-upload.php:764
 msgid "Use Image Service via Parameter, default and simple"
 msgstr ""
 
-#: oss-upload.php:753
+#: oss-upload.php:767
 msgid "Use Image Service via Style, powerful but require styles setting on OSS"
 msgstr ""
 
-#: oss-upload.php:758
+#: oss-upload.php:772
 msgid "Use physical thumbnails, check this when having problem with theme"
 msgstr ""
 
-#: oss-upload.php:760
+#: oss-upload.php:774
 msgid "Disable image thumbnails"
 msgstr ""
 
-#: oss-upload.php:763
+#: oss-upload.php:777
 msgid "Media Sizes Options"
 msgstr ""
 
-#: oss-upload.php:764
+#: oss-upload.php:778
 msgid "Clean Thumbnails"
 msgstr ""
 
-#: oss-upload.php:765
+#: oss-upload.php:779
 msgid "Regenerate Thumbnails"
 msgstr ""
 
-#: oss-upload.php:769
+#: oss-upload.php:783
 msgid "Thumbnail Quality"
 msgstr ""
 
-#: oss-upload.php:772
+#: oss-upload.php:786
 msgid ""
 "Set the quality of thumbnail for OSS Image Servie to speed up image loading, "
 "the smaller the faster"
 msgstr ""
 
-#: oss-upload.php:775
+#: oss-upload.php:789
 msgid "Featured Image"
 msgstr ""
 
-#: oss-upload.php:781
+#: oss-upload.php:795
 msgid ""
 "Set the featured image dimensions when thumbnails enabled (width x height)"
 msgstr ""
 
-#: oss-upload.php:784
-msgid "Style Separator"
-msgstr ""
-
-#: oss-upload.php:787
-msgid "Custom style separator for OSS Image Service style"
-msgstr ""
-
-#: oss-upload.php:790
-msgid "Fullsize Style"
-msgstr ""
-
-#: oss-upload.php:794
-msgid "Default full size image style for OSS Image Service"
-msgstr ""
-
-#: oss-upload.php:797
-msgid "GIF Style"
-msgstr ""
-
-#: oss-upload.php:800
-msgid "Using special OSS Image Service style for <code>GIF</code> format"
+#: oss-upload.php:798
+msgid "HD Thumbnails"
 msgstr ""
 
 #: oss-upload.php:801
-msgid "Check this to skip style for GIF image if having no animation effect"
+msgid ""
+"Disable <code>1356x1356</code>,<code>2048x2048</code> sizes when generate "
+"thumbnails"
+msgstr ""
+
+#: oss-upload.php:802
+msgid ""
+"Disable the whole high definition resolution things come with WordPress 5.3"
 msgstr ""
 
 #: oss-upload.php:805
-msgid "Auto Compress"
+msgid "Style Separator"
 msgstr ""
 
 #: oss-upload.php:808
-msgid "Compress as <code>WebP</code> format automatically if browser support"
+msgid "Custom style separator for OSS Image Service style"
 msgstr ""
 
-#: oss-upload.php:809
-msgid "Choose webp format on OSS if using styles for Image Service"
-msgstr ""
-
-#: oss-upload.php:812
-msgid "Lazyload"
+#: oss-upload.php:811
+msgid "Fullsize Style"
 msgstr ""
 
 #: oss-upload.php:815
+msgid "Default full size image style for OSS Image Service"
+msgstr ""
+
+#: oss-upload.php:818
+msgid "GIF Style"
+msgstr ""
+
+#: oss-upload.php:821
+msgid "Using special OSS Image Service style for <code>GIF</code> format"
+msgstr ""
+
+#: oss-upload.php:822
+msgid "Check this to skip style for GIF image if having no animation effect"
+msgstr ""
+
+#: oss-upload.php:826
+msgid "Auto Compress"
+msgstr ""
+
+#: oss-upload.php:829
+msgid "Compress as <code>WebP</code> format automatically if browser support"
+msgstr ""
+
+#: oss-upload.php:830
+msgid "Choose webp format on OSS if using styles for Image Service"
+msgstr ""
+
+#: oss-upload.php:833
+msgid "Lazyload"
+msgstr ""
+
+#: oss-upload.php:836
 msgid "Delay loading of images in long web pages"
 msgstr ""
 
-#: oss-upload.php:817
+#: oss-upload.php:838
 msgid "Images outside of viewport wont be loaded before user scrolls to them"
 msgstr ""
 
-#: oss-upload.php:820
+#: oss-upload.php:841
 msgid "Lazyload URL"
 msgstr ""
 
-#: oss-upload.php:823
+#: oss-upload.php:844
 msgid ""
 "Default image url for lazyload, could be with Image Service suffix, or "
 "base64 data, or normal url. <code>{IMG}</code> means original"
 msgstr ""
 
-#: oss-upload.php:832
+#: oss-upload.php:853
 msgid "Upload Mimes"
 msgstr ""
 
-#: oss-upload.php:836
+#: oss-upload.php:857
 msgid "Add file extensions and mime types to the allowed upload list"
 msgstr ""
 
-#: oss-upload.php:839
+#: oss-upload.php:860
 msgid "Auto Rename"
 msgstr ""
 
-#: oss-upload.php:842
+#: oss-upload.php:863
 msgid "Auto rename uploaded file if having like Non-ASCII problem"
 msgstr ""
 
-#: oss-upload.php:845
+#: oss-upload.php:866
 msgid "URL Fixer"
 msgstr ""
 
-#: oss-upload.php:848
+#: oss-upload.php:869
 msgid "Auto relocate attachments in past posts when OSS disabled"
 msgstr ""
 
-#: oss-upload.php:851
+#: oss-upload.php:872
 msgid "Find and replace whatever strings you want to fix the attachment url"
 msgstr ""
 
-#: oss-upload.php:854
+#: oss-upload.php:875
 msgid "Remote Image"
 msgstr ""
 
-#: oss-upload.php:857
+#: oss-upload.php:878
 msgid "Enable remote images autosave when edit post/page"
 msgstr ""
 
-#: oss-upload.php:859
+#: oss-upload.php:880
 msgid "Enable remote images autosave when import post/page"
 msgstr ""
 
-#: oss-upload.php:862
+#: oss-upload.php:883
 msgid "Whitelist / Blacklist rules for remote images autosave"
 msgstr ""
 
-#: oss-upload.php:865
+#: oss-upload.php:886
 msgid "Local Backup"
 msgstr ""
 
-#: oss-upload.php:868
+#: oss-upload.php:889
 msgid "Backup original image to local storage"
 msgstr ""
 
-#: oss-upload.php:874
+#: oss-upload.php:895
 msgid "Upload Missing Attachment"
 msgstr ""
 
-#: oss-upload.php:875
+#: oss-upload.php:896
 msgid "Upload Whole Local Storage"
 msgstr ""
 
-#: oss-upload.php:889
+#: oss-upload.php:910
 msgid ""
 "This action would clean all thumbnails including local and OSS that filename "
 "like photo-800x600.png, cannot be undone, comfirm to process?"
 msgstr ""
 
-#: oss-upload.php:892
+#: oss-upload.php:913
 msgid ""
 "This action would upload local storage directory to OSS, override if file "
 "exists, might take several minutes, comfirm to process?"
 msgstr ""
 
-#: oss-upload.php:895
+#: oss-upload.php:916
 msgid ""
 "This action would upload attachment from local storage that missing in OSS, "
 "might take several minutes, comfirm to process?"
 msgstr ""
 
-#: oss-upload.php:898
+#: oss-upload.php:919
 msgid ""
 "This action would regenerate metadata of all attachment in OSS, might take "
 "several minutes, comfirm to process?"

@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OSS Upload
- * Version: 4.8.5
+ * Version: 4.8.6
  * Description: Upload with Aliyun OSS, with modified OSS Wrapper and fully native image edit function support.
  * Plugin URI: https://www.xiaomac.com/oss-upload.html
  * Author: Link
@@ -172,10 +172,8 @@ add_action('admin_init', 'oss_upload_admin_init', 1);
 function oss_upload_admin_init() {
     register_setting('oss_upload_admin_options_group', 'ouop');
     if(!ouops('oss')) return;
-    if(isset($_GET['page'], $_GET['action']) && $_GET['page'] == 'oss-upload'){
-        oss_upload_admin_action();
-    }
-    add_filter('big_image_size_threshold', '__return_false');//kiss my ass...
+    if(isset($_GET['page'], $_GET['action']) && $_GET['page'] == 'oss-upload') oss_upload_admin_action();
+    if(ouops('oss_hd_thumbnail')) add_filter('big_image_size_threshold', '__return_false');
     add_filter('wp_privacy_exports_dir', 'oss_upload_privacy_exports_dir');
     add_filter('wp_privacy_exports_url', 'oss_upload_privacy_exports_url');
 }
@@ -394,6 +392,20 @@ function oss_upload_image_srcset($sources, $size, $image_src, $meta, $id){//wp_g
         $sources[$k]['url'] = oss_upload_auto_webp($url);
     }
     return $sources;
+}
+
+add_filter('intermediate_image_sizes', 'oss_upload_intermediate_sizes', 999);
+function oss_upload_intermediate_sizes($sizes){
+    if(!ouops('oss_hd_thumbnail')) return $sizes;
+    return array_merge(array_diff($sizes, array('1536x1536', '2048x2048')));
+}
+
+add_filter('intermediate_image_sizes_advanced', 'oss_upload_intermediate_sizes_advanced', 999);
+function oss_upload_intermediate_sizes_advanced($sizes){
+    if(!ouops('oss_hd_thumbnail')) return $sizes;
+    unset($sizes['1536x1536']);
+    unset($sizes['2048x2048']);
+    return $sizes;
 }
 
 add_filter('wp_get_attachment_url', 'oss_upload_attachment_url', 9999, 2);
@@ -663,8 +675,8 @@ function oss_upload_admin_action(){
             wp_update_attachment_metadata($file->ID, $metadata);
             echo $index++.". {$file->ID} {$img} {$postfix}<br/>\n";
             flush();
-            echo '<br/><hr/>';
         }
+        echo '<br/><hr/>';
         echo __('Reset attachments metadata done','oss-upload');
     }
     flush();
@@ -770,7 +782,7 @@ function oss_upload_options_page(){
         <tr valign="top">
         <th scope="row"><?php _e('Thumbnail Quality', 'oss-upload')?></th>
         <td>
-            <p><label><input type="number" name="ouop[oss_quality]" size="10" min="1" max="99" value="<?php echo ouops('oss_quality')?>" /></label></p>
+            <p><label><input type="number" name="ouop[oss_quality]" size="10" min="1" max="99" placeholder="15" value="<?php echo ouops('oss_quality')?>" /></label></p>
             <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Set the quality of thumbnail for OSS Image Servie to speed up image loading, the smaller the faster', 'oss-upload');?>: <code>1 ~ 99</code></small></p>
         </td></tr>
         <tr valign="top">
@@ -781,6 +793,13 @@ function oss_upload_options_page(){
                 <input type="text" name="ouop[oss_size_height]" size="10" value="<?php echo ouops('oss_size_height')?>" />
             </label></p>
             <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Set the featured image dimensions when thumbnails enabled (width x height)', 'oss-upload');?>: <code>800</code> x <code>450</code></small></p>
+        </td></tr>
+        <tr valign="top">
+        <th scope="row"><?php _e('HD Thumbnails', 'oss-upload')?></th>
+        <td>
+            <p><label><input name="ouop[oss_hd_thumbnail]" type="checkbox" value="1" <?php checked(ouops('oss_hd_thumbnail'),1);?> />
+            <?php _e('Disable <code>1356x1356</code>,<code>2048x2048</code> sizes when generate thumbnails','oss-upload')?></label></p>
+            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Disable the whole high definition resolution things come with WordPress 5.3', 'oss-upload');?></small></p>
         </td></tr>
         <tr valign="top">
         <th scope="row"><?php _e('Style Separator', 'oss-upload')?></th>
