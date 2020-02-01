@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OSS Upload
- * Version: 4.8.6
+ * Version: 4.8.7
  * Description: Upload with Aliyun OSS, with modified OSS Wrapper and fully native image edit function support.
  * Plugin URI: https://www.xiaomac.com/oss-upload.html
  * Author: Link
@@ -20,6 +20,7 @@ function oss_upload_init(){
     require_once('lib/OSSWrapper.php');
     oss_upload_dir_loader();
     add_action('post_submitbox_misc_actions', 'oss_upload_post_action');
+    add_action('add_meta_boxes', 'oss_upload_post_meta_boxes');
     add_filter('content_save_pre', 'oss_upload_post_save');
 }
 
@@ -142,7 +143,7 @@ function oss_upload_filesystem_method($method, $args, $context, $ownership){
 
 add_filter('_wp_relative_upload_path', 'oss_upload_relative_path', 10, 2);
 function oss_upload_relative_path($new_path, $path){
-    if(ouops('oss')){
+    if(ouops('oss') && oss_upload_check_handle()){
         $upload = wp_get_upload_dir();
         $new_path = str_replace(array($upload['basedir'].'/', $upload['default']['basedir'].'/'), '', $new_path);
     }
@@ -242,15 +243,27 @@ function oss_upload_enqueue(){
     wp_enqueue_script('jquery.lazyload', plugins_url('/lib/lazyload.js', __FILE__), array('jquery'), false, true);
 }
 
+function oss_upload_post_meta_boxes(){
+    $screen = get_current_screen();
+    if($screen->id == 'post' && method_exists($screen, 'is_block_editor') && $screen->is_block_editor()){
+        add_meta_box('open_social_post_meta_class', __('OSS Upload', 'oss-upload'),
+            'oss_upload_post_action', 'post', 'side', 'default');
+    }
+}
+
 function oss_upload_post_action(){
     $post = __('Autosave remote images to OSS', 'oss-upload');
-    echo "<div class=misc-pub-section><label><input name='oss_upload_remote' type='checkbox' value='1' ".checked(ouops('oss_remote'),1,0)." /> {$post}</label></div>";
+    echo "<div class=misc-pub-section><label><input name='oss_upload_remote_hidden' type='hidden' value='1' /><input name='oss_upload_remote' type='checkbox' value='1' ".checked(ouops('oss_remote'),1,0)." /> {$post}</label></div>";
 }
 
 function oss_upload_post_save($content){
     global $post;
-    if(empty($_POST['oss_upload_remote']) && !ouops('oss_upload_remote')) return $content;
-    if(!current_user_can('edit_post', $post->ID)) return $content;
+    if(empty($_POST['oss_upload_remote_hidden'])){
+        if(!ouops('oss_upload_remote')) return $content;
+    }else{
+        if(empty($_POST['oss_upload_remote'])) return $content;
+    }
+    if(empty($post->ID) || !current_user_can('edit_post', $post->ID)) return $content;
     $upload = wp_get_upload_dir();
     $default = substr($upload['default']['baseurl'], stripos($upload['default']['baseurl'], '//'));
     $baseurl = substr($upload['baseurl'], stripos($upload['baseurl'], '//'));
@@ -410,7 +423,7 @@ function oss_upload_intermediate_sizes_advanced($sizes){
 
 add_filter('wp_get_attachment_url', 'oss_upload_attachment_url', 9999, 2);
 function oss_upload_attachment_url($url, $id){
-    if(!ouops('oss') || !ouops('oss_url')) return $url;
+    if(!ouops('oss') || !ouops('oss_url') || !oss_upload_check_handle()) return $url;
     $upload = wp_get_upload_dir();
     $find = $upload['default']['baseurl'];
     $replace = $upload['baseurl'];
@@ -430,7 +443,7 @@ function oss_upload_attachment_url($url, $id){
 
 add_filter('get_attached_file', 'oss_upload_attached_file', 9999, 2);
 function oss_upload_attached_file($file, $id){
-    if(ouops('oss') && ouops('oss_path')){
+    if(ouops('oss') && ouops('oss_path') && oss_upload_check_handle()){
         $upload = wp_get_upload_dir();
         $find = $upload['default']['basedir'];
         $replace = $upload['basedir'];
@@ -487,7 +500,7 @@ function oss_upload_delete_thumbnail($id, $data=array()){
 
 add_action('delete_attachment', 'oss_upload_delete_attachment');
 function oss_upload_delete_attachment($id){
-    if(!ouops('oss')) return;
+    if(!ouops('oss') || !oss_upload_check_handle()) return;
     $arr = array();
     $upload = wp_get_upload_dir();
     if($file = get_post_meta($id, '_wp_attached_file', true)){
