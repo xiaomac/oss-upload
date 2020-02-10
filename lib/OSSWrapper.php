@@ -4,7 +4,7 @@
 /**
  * OSS协议封装类
  * @author Link (xiaomac.com)
- * @since 2019-10-22
+ * @since 2020-02-10
  */
 
  require_once('OSS.php');
@@ -12,25 +12,16 @@
 final class OSSWrapper extends OU_ALIOSS {
 	private $position = 0, $mode = '', $buffer;
 	public function url_stat($path, $flags) {
+		//$backtrace = debug_backtrace(1, 2);
+		//$call = !empty($backtrace[1]['function']) ? $backtrace[1]['function'] : false;//获取上级的调用函数
 		$return = false;
-		if(stripos(basename($path), '.') === false){//dir
-			$options = array();
-			$options['osdir'] = 1;//borrow the true via opendir
-			$info = self::dir_opendir($path, $options);
-			if($info) $return = array('mode' => 16895);
-		}else{//file
-			self::__getURL($path);
-			$info = self::get_object_meta($this->url['host'], $this->url['path']);
-			if($info->isOK()){//exist
-				$size = isset($info->header['_info']['download_content_length']) ? $info->header['_info']['download_content_length'] : 0;
-				if(empty($size)) $size = isset($info->header['content-length']) ? $info->header['content-length'] : 0;
-				$return = array(
-					'mode' => 33279, 
-					'size' => $size, 
-					'atime' => $info->header['_info']['filetime'], 
-					'mtime' => $info->header['_info']['filetime'], 
-					'ctime' => $info->header['_info']['filetime']
-				);
+		$info = self::dir_opendir($path, array('osdir' => 1, 'max-keys' => 1));
+		if(!empty($info['is_folder'])){//目录，用路径判断太机械，改用XML来判断
+			$return = array('mode' => 16895);
+		}else{//文件
+			if(!empty($info['is_file']) && !empty($info['file_info'])){
+				$return = $info['file_info'];
+				$return['mode'] = 33279;
 			}
 		}
 		clearstatcache();
@@ -65,15 +56,21 @@ final class OSSWrapper extends OU_ALIOSS {
 	public function dir_opendir($path, $options) {
 		self::__getURL($path);
 		if(empty($options)) $options = array();
-		$options['prefix'] = rtrim($this->url['path'], '/').'/';
+		$osdir = isset($options['osdir']);
+		$options['prefix'] = $osdir ? $this->url['path'] : rtrim($this->url['path'], '/').'/';//默认查询目录，指定osdir时为模糊查询
 		//$options['delimiter'] = '/';
 		$info = self::list_object($this->url['host'], $options);
 		if($info->isOK()){
+			$is_folder = false;
+			$is_file = false;
+			$file_info = false;
 			$xml = simplexml_load_string($info->body, 'SimpleXMLElement', LIBXML_NOCDATA);
 	        $arr = json_decode(json_encode($xml), true);
 			$this->buffer = array();
 			if(!empty($arr['CommonPrefixes'])){
+				$is_folder = true;
 				if(isset($arr['CommonPrefixes']['Prefix'])){
+					if(rtrim($arr['CommonPrefixes']['Prefix'], '/') != rtrim($arr['Prefix'], '/')) $is_folder = false;//如果是目录前缀模糊查询
 					if($key = substr($arr['CommonPrefixes']['Prefix'], strlen($options['prefix']))) $this->buffer[] = $key;
 				}else{
 					foreach ($arr['CommonPrefixes'] as $k=>$v) {
@@ -82,8 +79,19 @@ final class OSSWrapper extends OU_ALIOSS {
 				}
 			}
 			if(!empty($arr['Contents'])){
+				$is_file = true;
 				if(isset($arr['Contents']['Key'])){
+					if(substr($arr['Contents']['Key'], -1) == '/'){//斜杆结尾为目录
+						$is_folder = true;
+						$is_file = false;
+					}
 					if($key = substr($arr['Contents']['Key'], strlen($options['prefix']))) $this->buffer[] = $key;
+					$file_info = array(
+						'size' => $arr['Contents']['Size'],
+						'atime' => strtotime($arr['Contents']['LastModified']),
+						'mtime' => strtotime($arr['Contents']['LastModified']),
+						'ctime' => strtotime($arr['Contents']['LastModified'])
+					);
 				}else{
 					foreach ($arr['Contents'] as $k=>$v) {
 						if(isset($v['Key']) && ($key = substr($v['Key'], strlen($options['prefix'])))) $this->buffer[] = $key;
@@ -91,13 +99,14 @@ final class OSSWrapper extends OU_ALIOSS {
 				}
 			}
 			if(!empty($options['osdir'])){
-				if(!empty($this->buffer)){
-					$this->position = 0;
-					unset($this->buffer);
-					return true;
-				}else{
-					return false;
-				}
+				return array('is_folder' => $is_folder, 'is_file' => $is_file, 'file_info' => $file_info);
+			}
+			if(!empty($this->buffer)){
+				$this->position = 0;
+				unset($this->buffer);
+				return true;
+			}else{
+				return $is_folder || $is_file;
 			}
 			return true;
 		}
