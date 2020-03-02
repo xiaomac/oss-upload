@@ -18,6 +18,10 @@
 * 支持自动识别并生成WEBP格式
 * 带中英文附带设置说明和示范
 
+### 下载
+
+https://github.com/xiaomac/oss-upload/archive/4.8.8.zip
+
 ### 更多
 
 [https://www.xiaomac.com/oss-upload.html](https://www.xiaomac.com/oss-upload.html)
