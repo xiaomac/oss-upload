@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OSS Upload
- * Version: 4.8.8
+ * Version: 4.8.9
  * Description: Upload with Aliyun OSS, with modified OSS Wrapper and fully native image edit function support.
  * Plugin URI: https://www.xiaomac.com/oss-upload.html
  * Author: Link
@@ -387,7 +387,7 @@ function oss_upload_attachment_metadata($data, $id){
 
 add_filter('wp_calculate_image_srcset', 'oss_upload_image_srcset', 9999, 5);
 function oss_upload_image_srcset($sources, $size, $image_src, $meta, $id){//wp_get_attachment_image_srcset
-    if(!ouops('oss') || empty($meta['sizes'])) return $sources;
+    if(!ouops('oss') || empty($meta['sizes']) || empty($sources)) return $sources;
     $upload = wp_get_upload_dir();
     if(parse_url(admin_url(), PHP_URL_SCHEME) == 'https'){
         $upload['default']['baseurl'] = set_url_scheme($upload['default']['baseurl'], 'https');
@@ -812,7 +812,7 @@ function oss_upload_options_page(){
         <td>
             <p><label><input name="ouop[oss_hd_thumbnail]" type="checkbox" value="1" <?php checked(ouops('oss_hd_thumbnail'),1);?> />
             <?php _e('Disable <code>1356x1356</code>,<code>2048x2048</code> sizes when generate thumbnails','oss-upload')?></label></p>
-            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Disable the whole high definition resolution things come with WordPress 5.3', 'oss-upload');?></small></p>
+            <p <?php oss_upload_show_more('oss_upload_desc'); ?>><small><?php _e('Disable the whole high definition resolution things come with WordPress 5.3 like <code>image-scaled.png</code>', 'oss-upload');?></small></p>
         </td></tr>
         <tr valign="top">
         <th scope="row"><?php _e('Style Separator', 'oss-upload')?></th>

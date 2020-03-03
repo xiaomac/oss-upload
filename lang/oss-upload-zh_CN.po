@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OSS Upload\n"
-"POT-Creation-Date: 2019-12-30 13:35+0800\n"
-"PO-Revision-Date: 2019-12-30 13:36+0800\n"
+"POT-Creation-Date: 2020-03-03 16:42+0800\n"
+"PO-Revision-Date: 2020-03-03 16:43+0800\n"
 "Last-Translator: Link <playes@qq.com>\n"
 "Language-Team: Link <playes@qq.com>\n"
 "Language: zh_CN\n"
@@ -21,155 +21,156 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
 #. Plugin Name of the plugin/theme
-#: oss-upload.php:183 oss-upload.php:189 oss-upload.php:594 oss-upload.php:690
+#: oss-upload.php:184 oss-upload.php:190 oss-upload.php:249 oss-upload.php:607
+#: oss-upload.php:703
 msgid "OSS Upload"
 msgstr ""
 
-#: oss-upload.php:197
+#: oss-upload.php:198
 msgid "Settings"
 msgstr "设置"
 
-#: oss-upload.php:225
+#: oss-upload.php:226
 msgid "For Less"
 msgstr "更少"
 
-#: oss-upload.php:226
+#: oss-upload.php:227
 msgid "Descriptions"
 msgstr "描述"
 
-#: oss-upload.php:227
+#: oss-upload.php:228
 msgid "Examples"
 msgstr "示范"
 
-#: oss-upload.php:246
+#: oss-upload.php:255
 msgid "Autosave remote images to OSS"
 msgstr "自动保存远程图片到 OSS"
 
-#: oss-upload.php:539
+#: oss-upload.php:552
 msgid "Aliyun Coupon <span>NEW</span>"
 msgstr "阿里云代金券 <span>新</span>"
 
-#: oss-upload.php:540
+#: oss-upload.php:553
 msgid "OSS Discount <span>HOT</span>"
 msgstr "OSS钜惠折扣 <span>热</span>"
 
-#: oss-upload.php:541
+#: oss-upload.php:554
 msgid "Rating Stars"
 msgstr "点赞插件"
 
-#: oss-upload.php:542
+#: oss-upload.php:555
 msgid "Support and Help"
 msgstr "技术支持"
 
-#: oss-upload.php:543
+#: oss-upload.php:556
 msgid "About Developer"
 msgstr "关于作者"
 
-#: oss-upload.php:544
+#: oss-upload.php:557
 msgid "See More Plugins"
 msgstr "更多插件"
 
-#: oss-upload.php:545
+#: oss-upload.php:558
 msgid "About"
 msgstr "关于"
 
-#: oss-upload.php:546
+#: oss-upload.php:559
 msgid "Aliyun OSS"
 msgstr "OSS 官网"
 
-#: oss-upload.php:547
+#: oss-upload.php:560
 msgid "OSS PHP SDK"
 msgstr "OSS 开发文档"
 
-#: oss-upload.php:548
+#: oss-upload.php:561
 msgid "For More"
 msgstr "更多"
 
-#: oss-upload.php:562
+#: oss-upload.php:575
 msgid "Write OK, "
 msgstr "写入正常, "
 
-#: oss-upload.php:565
+#: oss-upload.php:578
 msgid "Read OK, "
 msgstr "读取正常, "
 
-#: oss-upload.php:568
+#: oss-upload.php:581
 msgid "Delete OK"
 msgstr "删除正常"
 
-#: oss-upload.php:571
+#: oss-upload.php:584
 msgid "Delete Error: "
 msgstr "删除出错: "
 
-#: oss-upload.php:574
+#: oss-upload.php:587
 msgid "Read Error: "
 msgstr "读取出错: "
 
-#: oss-upload.php:577
+#: oss-upload.php:590
 msgid "Write Error: "
 msgstr "写入出错: "
 
-#: oss-upload.php:595
+#: oss-upload.php:608
 msgid "Starting..."
 msgstr "开始处理……"
 
-#: oss-upload.php:602
+#: oss-upload.php:615
 msgid "deleted"
 msgstr "已删除"
 
-#: oss-upload.php:632
+#: oss-upload.php:645
 msgid "No thumbnail found"
 msgstr "没有发现缩略图"
 
-#: oss-upload.php:635
+#: oss-upload.php:648
 msgid "Clean thumbnails done"
 msgstr "清理错略图完成"
 
-#: oss-upload.php:646
+#: oss-upload.php:659
 msgid "Upload local storage to OSS done"
 msgstr "上传本地存储完成"
 
-#: oss-upload.php:652
+#: oss-upload.php:665
 msgid "synced"
 msgstr "已同步"
 
-#: oss-upload.php:662
+#: oss-upload.php:675
 msgid "No attachments need to be synced"
 msgstr "没有附件需同步"
 
-#: oss-upload.php:665
+#: oss-upload.php:678
 msgid "Sync missing attachments to OSS done"
 msgstr "同步缺失的附件到 OSS 完成"
 
-#: oss-upload.php:670
+#: oss-upload.php:683
 msgid "reset"
 msgstr "已重置"
 
-#: oss-upload.php:680
+#: oss-upload.php:693
 msgid "Reset attachments metadata done"
 msgstr "重置附件元数据完成"
 
-#: oss-upload.php:697
+#: oss-upload.php:710
 msgid "Enable"
 msgstr "启用"
 
-#: oss-upload.php:700
+#: oss-upload.php:713
 msgid "Use OSS as media library storage"
 msgstr "使用 OSS 作为媒体库存储"
 
-#: oss-upload.php:703
+#: oss-upload.php:716
 msgid "Access Key"
 msgstr "Access Key"
 
-#: oss-upload.php:709
+#: oss-upload.php:722
 msgid "Secret Key"
 msgstr "Secret Key"
 
-#: oss-upload.php:715
+#: oss-upload.php:728
 msgid "Upload Path"
 msgstr "上传路径"
 
-#: oss-upload.php:719
+#: oss-upload.php:732
 msgid ""
 "<code>{BUCKET}</code> is Bucket name, <code>{PATH}</code> can be empty, with "
 "no slash at the end"
@@ -177,153 +178,156 @@ msgstr ""
 "<code>{BUCKET}</code> 为存储空间名称，<code>{PATH}</code> 为目录，可为空，最"
 "后不带斜杠"
 
-#: oss-upload.php:726
+#: oss-upload.php:739
 msgid "Visit URL"
 msgstr "访问链接"
 
-#: oss-upload.php:730
+#: oss-upload.php:743
 msgid ""
 "<code>{BUCKET}</code> can be directory or domain, <code>{PATH}</code> can be "
 "empty"
 msgstr "<code>{BUCKET}</code> 可为目录或域名，<code>{PATH}</code> 可为空"
 
-#: oss-upload.php:740
+#: oss-upload.php:753
 msgid "Upload EndPoint"
 msgstr "地域节点"
 
-#: oss-upload.php:744
+#: oss-upload.php:757
 msgid ""
 "Endpoint of your Bucket, can be internal address if WEB SERVER is in the "
 "same area with OSS"
 msgstr "存储空间的 Endpoint，如服务器跟 OSS 处于同个区域允许设置为内部地址"
 
-#: oss-upload.php:758
+#: oss-upload.php:771
 msgid "Run a test"
 msgstr "测试一下"
 
-#: oss-upload.php:762
+#: oss-upload.php:775
 msgid "Image Thumbnails"
 msgstr "缩略图"
 
-#: oss-upload.php:764
+#: oss-upload.php:777
 msgid "Use Image Service via Parameter, default and simple"
 msgstr "使用参数图片服务，默认且简单"
 
-#: oss-upload.php:767
+#: oss-upload.php:780
 msgid "Use Image Service via Style, powerful but require styles setting on OSS"
 msgstr "使用样式图片服务，定制功能强大但需额外设置样式"
 
-#: oss-upload.php:772
+#: oss-upload.php:785
 msgid "Use physical thumbnails, check this when having problem with theme"
 msgstr "使用物理缩略图，如主题有缩略图错误请尝试勾选"
 
-#: oss-upload.php:774
+#: oss-upload.php:787
 msgid "Disable image thumbnails"
 msgstr "禁用缩略图"
 
-#: oss-upload.php:777
+#: oss-upload.php:790
 msgid "Media Sizes Options"
 msgstr "媒体尺寸选项"
 
-#: oss-upload.php:778
+#: oss-upload.php:791
 msgid "Clean Thumbnails"
 msgstr "清理缩略图"
 
-#: oss-upload.php:779
+#: oss-upload.php:792
 msgid "Regenerate Thumbnails"
 msgstr "重新生成缩略图"
 
-#: oss-upload.php:783
+#: oss-upload.php:796
 msgid "Thumbnail Quality"
 msgstr "缩略图质量"
 
-#: oss-upload.php:786
+#: oss-upload.php:799
 msgid ""
 "Set the quality of thumbnail for OSS Image Servie to speed up image loading, "
 "the smaller the faster"
 msgstr "设置图片服务的缩略图质量以提升加载速度，越小约模糊，加载越快"
 
-#: oss-upload.php:789
+#: oss-upload.php:802
 msgid "Featured Image"
 msgstr "特色图片"
 
-#: oss-upload.php:795
+#: oss-upload.php:808
 msgid ""
 "Set the featured image dimensions when thumbnails enabled (width x height)"
 msgstr "当启用缩略图后设置特色图片的尺寸大小（宽X高）"
 
-#: oss-upload.php:798
+#: oss-upload.php:811
 msgid "HD Thumbnails"
 msgstr "高清缩略图"
 
-#: oss-upload.php:801
+#: oss-upload.php:814
 msgid ""
 "Disable <code>1356x1356</code>,<code>2048x2048</code> sizes when generate "
 "thumbnails"
 msgstr "禁止生成 <code>1356x1356</code> <code>2048x2048</code> 缩略图"
 
-#: oss-upload.php:802
+#: oss-upload.php:815
 msgid ""
-"Disable the whole high definition resolution things come with WordPress 5.3"
-msgstr "禁用 WordPress 5.3 附带的高清分辨率相关功能"
+"Disable the whole high definition resolution things come with WordPress 5.3 "
+"like <code>image-scaled.png</code>"
+msgstr ""
+"禁用 WordPress 5.3 附带的高清分辨率相关功能（形如 <code>image-scaled.png</"
+"code>）"
 
-#: oss-upload.php:805
+#: oss-upload.php:818
 msgid "Style Separator"
 msgstr "样式分隔符"
 
-#: oss-upload.php:808
+#: oss-upload.php:821
 msgid "Custom style separator for OSS Image Service style"
 msgstr "自定义 OSS 图片服务的样式名分隔符"
 
-#: oss-upload.php:811
+#: oss-upload.php:824
 msgid "Fullsize Style"
 msgstr "原图样式"
 
-#: oss-upload.php:815
+#: oss-upload.php:828
 msgid "Default full size image style for OSS Image Service"
 msgstr "全尺寸图片的默认样式"
 
-#: oss-upload.php:818
+#: oss-upload.php:831
 msgid "GIF Style"
 msgstr "动画样式"
 
-#: oss-upload.php:821
+#: oss-upload.php:834
 msgid "Using special OSS Image Service style for <code>GIF</code> format"
 msgstr "为 <code>GIF</code> 格式启用特别的 OSS 图像服务样式"
 
-#: oss-upload.php:822
+#: oss-upload.php:835
 msgid "Check this to skip style for GIF image if having no animation effect"
 msgstr "如GIF无动画效果可勾选此项忽略其图片服务"
 
-#: oss-upload.php:826
+#: oss-upload.php:839
 msgid "Auto Compress"
 msgstr "自动压缩"
 
-#: oss-upload.php:829
+#: oss-upload.php:842
 msgid "Compress as <code>WebP</code> format automatically if browser support"
 msgstr "自动压缩为 <code>WebP</code> 格式如浏览器支持"
 
-#: oss-upload.php:830
+#: oss-upload.php:843
 msgid "Choose webp format on OSS if using styles for Image Service"
 msgstr "如图片服务使用样式则在设置样式时选 webp 格式"
 
-#: oss-upload.php:833
+#: oss-upload.php:846
 msgid "Lazyload"
 msgstr "延时加载"
 
-#: oss-upload.php:836
+#: oss-upload.php:849
 msgid "Delay loading of images in long web pages"
 msgstr "延迟加载长网页中的图片"
 
-#: oss-upload.php:838
+#: oss-upload.php:851
 msgid "Images outside of viewport wont be loaded before user scrolls to them"
 msgstr "图片滚动到视区内才加载原图"
 
-#: oss-upload.php:841
+#: oss-upload.php:854
 msgid "Lazyload URL"
 msgstr "延时链接"
 
-#: oss-upload.php:844
+#: oss-upload.php:857
 msgid ""
 "Default image url for lazyload, could be with Image Service suffix, or "
 "base64 data, or normal url. <code>{IMG}</code> means original"
@@ -331,67 +335,67 @@ msgstr ""
 "延时加载的默认图片链接，可以是图像服务后缀、64位编码数据或普通地址。"
 "<code>{IMG}</code> 表示原图地址"
 
-#: oss-upload.php:853
+#: oss-upload.php:866
 msgid "Upload Mimes"
 msgstr "上传类型"
 
-#: oss-upload.php:857
+#: oss-upload.php:870
 msgid "Add file extensions and mime types to the allowed upload list"
 msgstr "添加文件扩展名和MIME类型到允许上传列表中"
 
-#: oss-upload.php:860
+#: oss-upload.php:873
 msgid "Auto Rename"
 msgstr "自动重命名"
 
-#: oss-upload.php:863
+#: oss-upload.php:876
 msgid "Auto rename uploaded file if having like Non-ASCII problem"
 msgstr "上传时文件自动重命名，如有中文乱码之类的问题请勾选"
 
-#: oss-upload.php:866
+#: oss-upload.php:879
 msgid "URL Fixer"
 msgstr "连接修正"
 
-#: oss-upload.php:869
+#: oss-upload.php:882
 msgid "Auto relocate attachments in past posts when OSS disabled"
 msgstr "当停用 OSS 时自动替换旧文章中的附件地址"
 
-#: oss-upload.php:872
+#: oss-upload.php:885
 msgid "Find and replace whatever strings you want to fix the attachment url"
 msgstr "查找并替换附件连接中的指定字符串"
 
-#: oss-upload.php:875
+#: oss-upload.php:888
 msgid "Remote Image"
 msgstr "远程图片"
 
-#: oss-upload.php:878
+#: oss-upload.php:891
 msgid "Enable remote images autosave when edit post/page"
 msgstr "当编辑文章时自动保存远程图片"
 
-#: oss-upload.php:880
+#: oss-upload.php:893
 msgid "Enable remote images autosave when import post/page"
 msgstr "当导入文章时自动保存远程图片"
 
-#: oss-upload.php:883
+#: oss-upload.php:896
 msgid "Whitelist / Blacklist rules for remote images autosave"
 msgstr "远程图像自动保存的白名单/黑名单规则"
 
-#: oss-upload.php:886
+#: oss-upload.php:899
 msgid "Local Backup"
 msgstr "本地备份"
 
-#: oss-upload.php:889
+#: oss-upload.php:902
 msgid "Backup original image to local storage"
 msgstr "备份原图到本地存储"
 
-#: oss-upload.php:895
+#: oss-upload.php:908
 msgid "Upload Missing Attachment"
 msgstr "上传 OSS 缺失附件"
 
-#: oss-upload.php:896
+#: oss-upload.php:909
 msgid "Upload Whole Local Storage"
 msgstr "上传整个本地存储目录"
 
-#: oss-upload.php:910
+#: oss-upload.php:923
 msgid ""
 "This action would clean all thumbnails including local and OSS that filename "
 "like photo-800x600.png, cannot be undone, comfirm to process?"
@@ -399,7 +403,7 @@ msgstr ""
 "此操作将清除本地和 OSS 所有文件名形如 photo-800x600.png 的图片缩略图，无法撤"
 "消，是否继续？"
 
-#: oss-upload.php:913
+#: oss-upload.php:926
 msgid ""
 "This action would upload local storage directory to OSS, override if file "
 "exists, might take several minutes, comfirm to process?"
@@ -407,13 +411,13 @@ msgstr ""
 "此操作将本地存储目录完整上载到 OSS，文件存在则自动覆盖，可能需要几十分钟，是"
 "否继续？"
 
-#: oss-upload.php:916
+#: oss-upload.php:929
 msgid ""
 "This action would upload attachment from local storage that missing in OSS, "
 "might take several minutes, comfirm to process?"
 msgstr "此操作将从本地存储同步丢失的附件到 OSS，可能需要几十分钟，是否继续？"
 
-#: oss-upload.php:919
+#: oss-upload.php:932
 msgid ""
 "This action would regenerate metadata of all attachment in OSS, might take "
 "several minutes, comfirm to process?"

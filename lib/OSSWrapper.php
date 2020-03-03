@@ -13,7 +13,7 @@ final class OSSWrapper extends OU_ALIOSS {
 	private $position = 0, $mode = '', $buffer;
 	public function url_stat($path, $flags) {
 		//$backtrace = debug_backtrace(1, 2);
-		//$call = !empty($backtrace[1]['function']) ? $backtrace[1]['function'] : false;//获取上级的调用函数
+		//$call = !empty($backtrace[1]['function']) ? $backtrace[1]['function'] : false;//可获取上级调用函数，暂时无需用到
 		$return = false;
 		$info = self::dir_opendir($path, array('osdir' => 1, 'max-keys' => 1));
 		if(!empty($info['is_folder'])){//目录，用路径判断太机械，改用XML来判断
@@ -65,12 +65,17 @@ final class OSSWrapper extends OU_ALIOSS {
 			$is_file = false;
 			$file_info = false;
 			$xml = simplexml_load_string($info->body, 'SimpleXMLElement', LIBXML_NOCDATA);
-	        $arr = json_decode(json_encode($xml), true);
+			$arr = json_decode(json_encode($xml), true);
+			if($base = empty($arr['Prefix'])){//前缀为空即为查询根目录
+				if(!empty($options['osdir'])){
+					return array('is_folder' => true, 'is_file' => $is_file, 'file_info' => $file_info);
+				}
+			}
 			$this->buffer = array();
 			if(!empty($arr['CommonPrefixes'])){
 				$is_folder = true;
 				if(isset($arr['CommonPrefixes']['Prefix'])){
-					if(rtrim($arr['CommonPrefixes']['Prefix'], '/') != rtrim($arr['Prefix'], '/')) $is_folder = false;//如果是目录前缀模糊查询
+					if(!$base && rtrim($arr['CommonPrefixes']['Prefix'], '/') != rtrim($arr['Prefix'], '/')) $is_folder = false;//如果是目录前缀模糊查询
 					if($key = substr($arr['CommonPrefixes']['Prefix'], strlen($options['prefix']))) $this->buffer[] = $key;
 				}else{
 					foreach ($arr['CommonPrefixes'] as $k=>$v) {

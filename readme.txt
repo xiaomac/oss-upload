@@ -4,14 +4,11 @@ Contributors: Link
 Donate link: https://www.xiaomac.com/about
 Tags: aliyun, oss, upload, media, files, storage, cloud, 阿里云, 媒体库, 图片, 上传, 云存储
 Tested up to: 5.3.2
-Stable tag: 4.8.7
+Stable tag: 4.8.9
 
 == Description ==
 
 使用阿里云 OSS 作为媒体库附件存储空间，支持原创增强的 OSS 协议包装和全原生图像编辑及衍生功能。
-
-todo: 批量上传慢的问题、还是有报样式重复的问题
-
 
 ### 功能 ###
 
@@ -44,6 +41,9 @@ None
 1. Settings
 
 == Changelog ==
+
+= 4.8.9 =
+* 修复个别主题会严重报错的问题
 
 = 4.8.8 =
 * 修复伪协议包装的核心兼容问题
