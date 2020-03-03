@@ -20,7 +20,7 @@
 
 ### 下载
 
-https://github.com/xiaomac/oss-upload/archive/4.8.8.zip
+https://github.com/xiaomac/oss-upload/releases
 
 ### 更多
 
