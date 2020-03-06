@@ -20,7 +20,9 @@
 
 ### 下载
 
-https://github.com/xiaomac/oss-upload/archive/4.8.8.zip
+https://github.com/xiaomac/oss-upload/releases
+
+注意，下载ZIP包后，其中的目录要去掉版本号（oss-upload），我还不知道怎么去掉这个版本号。
 
 ### 更多
 
