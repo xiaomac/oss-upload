@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: OSS Upload
- * Version: 4.8.9
+ * Version: 4.9
  * Description: Upload with Aliyun OSS, with modified OSS Wrapper and fully native image edit function support.
  * Plugin URI: https://www.xiaomac.com/oss-upload.html
  * Author: Link

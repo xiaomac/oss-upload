@@ -4,7 +4,7 @@ Contributors: Link
 Donate link: https://www.xiaomac.com/about
 Tags: aliyun, oss, upload, media, files, storage, cloud, 阿里云, 媒体库, 图片, 上传, 云存储
 Tested up to: 5.3.2
-Stable tag: 4.8.9
+Stable tag: 4.9
 
 == Description ==
 
@@ -41,6 +41,9 @@ None
 1. Settings
 
 == Changelog ==
+
+= 4.9 =
+* 修复打开图片可能会下载的问题
 
 = 4.8.9 =
 * 修复个别主题会严重报错的问题
