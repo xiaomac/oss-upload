@@ -567,32 +567,36 @@ function oss_upload_admin_note(){
     $screen = get_current_screen();
     if($screen->id != 'settings_page_oss-upload' || !ouops('oss') || !is_super_admin()) return;
     if(isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'test'){
+        $out = "";
+        $ok = false;
+        $try = "";
         try{
             $rnd = md5(time());
             $file = ouops('oss_path').'/oss_upload_'.$rnd.'.txt';
+
             $try = file_put_contents($file, $rnd);
-            if($try == strlen($rnd)){
-                $out = __('Write OK, ','oss-upload');
-                $try = file_get_contents($file);
-                if($try == $rnd){
-                    $out .= __('Read OK, ', 'oss-upload');
-                    $try = unlink($file);
-                    if($try === true){
-                        $out .= __('Delete OK', 'oss-upload');
-                        $ok = true;
-                    }else{
-                        throw new RequestCore_Exception($out . __('Delete Error: ', 'oss-upload') . $try);
-                    }
-                }else{
-                    throw new RequestCore_Exception($out . __('Read Error: ', 'oss-upload') . $try);
-                }
-            }else{
+            if($try !== strlen($rnd)){
                 throw new RequestCore_Exception($out . __('Write Error: ', 'oss-upload') . $try);
             }
+            $out = __('Write OK, ','oss-upload');
+
+            $try = file_get_contents($file);
+            if($try !== $rnd) {
+                throw new RequestCore_Exception($out . __('Read Error: ', 'oss-upload') . $try);
+            }
+            $out .= __('Read OK, ', 'oss-upload');
+
+            $try = unlink($file);
+            if($try == false){
+                throw new RequestCore_Exception($out . __('Delete Error: ', 'oss-upload') . $try);
+            }
+            $out .= __('Delete OK', 'oss-upload');
+
+            $ok = true;
         }catch(Exception $ex){
             $out = esc_html($ex->getMessage());
         }
-        if(isset($out)) echo '<div class="'. ($ok ? 'updated fade' : 'error') . '"><p>'.$out.'</p></div>';
+        echo '<div class="'. ($ok ? 'updated fade' : 'error') . '"><p>'.$out.'</p></div>';
     }
     if(isset($_SESSION['oss_upload_error'])){
         echo '<div class="error"><p>'.$_SESSION['oss_upload_error'].'</p></div>';
