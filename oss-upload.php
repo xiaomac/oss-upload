@@ -568,38 +568,62 @@ function oss_upload_admin_note(){
     if($screen->id != 'settings_page_oss-upload' || !ouops('oss') || !is_super_admin()) return;
     if(isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'test'){
         $out = "";
-        $ok = false;
-        $try = "";
+        $style_class = "updated fade";
         try{
             $rnd = md5(time());
             $file = ouops('oss_path').'/oss_upload_'.$rnd.'.txt';
 
-            $try = file_put_contents($file, $rnd);
-            if($try !== strlen($rnd)){
-                throw new RequestCore_Exception($out . __('Write Error: ', 'oss-upload') . $try);
-            }
-            $out = __('Write OK, ','oss-upload');
+            validate_write_file($file, $rnd);
+            $out .= __('Write OK, ', 'oss-upload');
 
-            $try = file_get_contents($file);
-            if($try !== $rnd) {
-                throw new RequestCore_Exception($out . __('Read Error: ', 'oss-upload') . $try);
-            }
+            validate_read_file($file, $rnd);
             $out .= __('Read OK, ', 'oss-upload');
 
-            $try = unlink($file);
-            if($try == false){
-                throw new RequestCore_Exception($out . __('Delete Error: ', 'oss-upload') . $try);
-            }
+            validate_delete_file($file);
             $out .= __('Delete OK', 'oss-upload');
-
-            $ok = true;
         }catch(Exception $ex){
-            $out = esc_html($ex->getMessage());
+            $style_class = "error";
+            $out .= esc_html($ex->getMessage());
         }
-        echo '<div class="'. ($ok ? 'updated fade' : 'error') . '"><p>'.$out.'</p></div>';
+        echo '<div class="'. $style_class . '"><p>'.$out.'</p></div>';
     }
     if(isset($_SESSION['oss_upload_error'])){
         echo '<div class="error"><p>'.$_SESSION['oss_upload_error'].'</p></div>';
+    }
+}
+
+/**
+ * @param $file string path of the file to validate
+ * @throws RequestCore_Exception
+ */
+function validate_delete_file($file) {
+    $try = unlink($file);
+    if ($try == false) {
+        throw new RequestCore_Exception( __('Delete Error: ', 'oss-upload') . $try);
+    }
+}
+
+/**
+ * @param $file string path of the file to validate
+ * @param $expected_content string expected content
+ * @throws RequestCore_Exception
+ */
+function validate_read_file($file, $expected_content) {
+    $try = file_get_contents($file);
+    if ($try !== $expected_content) {
+        throw new RequestCore_Exception( __('Read Error: ', 'oss-upload') . $try);
+    }
+}
+
+/**
+ * @param $file string path of the file to validate
+ * @param $expected_content string expected content
+ * @throws RequestCore_Exception
+ */
+function validate_write_file($file, $expected_content) {
+    $try = file_put_contents($file, $expected_content);
+    if ($try !== strlen($expected_content)) {
+        throw new RequestCore_Exception( __('Write Error: ', 'oss-upload') . $try);
     }
 }
 
