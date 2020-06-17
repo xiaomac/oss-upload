@@ -590,7 +590,7 @@ function oss_upload_admin_note(){
                 throw new RequestCore_Exception($out . __('Write Error: ', 'oss-upload') . $try);
             }
         }catch(Exception $ex){
-            $out = esc_html($ex->message);
+            $out = esc_html($ex->getMessage());
         }
         if(isset($out)) echo '<div class="'. ($ok ? 'updated fade' : 'error') . '"><p>'.$out.'</p></div>';
     }
