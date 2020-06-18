@@ -360,10 +360,8 @@ class OSSUtil
             if ($read_length <= 0) {
                 break;
             }
-            else {
-                $data .= fread($fh, $read_length);
-                $left_length = $left_length - $read_length;
-            }
+            $data .= fread($fh, $read_length);
+            $left_length = $left_length - $read_length;
         }
         fclose($fh);
         $content_md5 = base64_encode(md5($data, true));
@@ -393,6 +391,7 @@ class OSSUtil
     /**
      * 转换响应
      * @param $response
+     * @param string $format
      * @return array
      * @throws Exception
      */
@@ -409,7 +408,7 @@ class OSSUtil
                 $body = empty($body) ? $body : json_encode(XML2Array::createArray($body));
                 break;
             default:
-                break;
+                return $response;
         }
 
         return array(
@@ -418,6 +417,40 @@ class OSSUtil
             'header' => $headers,
             'body' => $body
         );
-        return $response;
+    }
+
+    /**
+     * @param $file string path of the file to validate
+     * @throws RequestCore_Exception
+     */
+    public static function validate_delete_file($file) {
+        $try = unlink($file);
+        if ($try == false) {
+            throw new RequestCore_Exception(__('Delete Error: ', 'oss-upload') . $try);
+        }
+    }
+
+    /**
+     * @param $file string path of the file to validate
+     * @param $expected_content string expected content
+     * @throws RequestCore_Exception
+     */
+    public static function validate_read_file($file, $expected_content) {
+        $try = file_get_contents($file);
+        if ($try !== $expected_content) {
+            throw new RequestCore_Exception(__('Read Error: ', 'oss-upload') . $try);
+        }
+    }
+
+    /**
+     * @param $file string path of the file to validate
+     * @param $expected_content string expected content
+     * @throws RequestCore_Exception
+     */
+    public static function validate_write_file($file, $expected_content) {
+        $try = file_put_contents($file, $expected_content);
+        if ($try !== strlen($expected_content)) {
+            throw new RequestCore_Exception(__('Write Error: ', 'oss-upload') . $try);
+        }
     }
 }

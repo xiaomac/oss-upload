@@ -303,7 +303,7 @@ function oss_upload_post_save($content){
             if(!pathinfo($img, 4)) $img .= '#?'.oss_upload_basename($img).'.png';//for unlikely-image url
             $desc = explode('#', pathinfo($img, 8));
             try{
-                //$imgid = media_sideload_image($img, $post->ID, $desc[0], 'id');//one step without rename
+//                $imgid = media_sideload_image($img, $post->ID, $desc[0], 'id');//one step without rename
                 $tmpfile = download_url($img);
                 if(!is_wp_error($tmpfile)){
                     preg_match('/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $img, $mxx);
@@ -567,32 +567,25 @@ function oss_upload_admin_note(){
     $screen = get_current_screen();
     if($screen->id != 'settings_page_oss-upload' || !ouops('oss') || !is_super_admin()) return;
     if(isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'test'){
+        $out = "";
+        $style_class = "updated fade";
         try{
             $rnd = md5(time());
             $file = ouops('oss_path').'/oss_upload_'.$rnd.'.txt';
-            $try = file_put_contents($file, $rnd);
-            if($try == strlen($rnd)){
-                $out = __('Write OK, ','oss-upload');
-                $try = file_get_contents($file);
-                if($try == $rnd){
-                    $out .= __('Read OK, ', 'oss-upload');
-                    $try = unlink($file);
-                    if($try === true){
-                        $out .= __('Delete OK', 'oss-upload');
-                        $ok = true;
-                    }else{
-                        throw new RequestCore_Exception($out . __('Delete Error: ', 'oss-upload') . $try);
-                    }
-                }else{
-                    throw new RequestCore_Exception($out . __('Read Error: ', 'oss-upload') . $try);
-                }
-            }else{
-                throw new RequestCore_Exception($out . __('Write Error: ', 'oss-upload') . $try);
-            }
+
+            OSSUtil::validate_write_file($file, $rnd);
+            $out .= __('Write OK, ', 'oss-upload');
+
+            OSSUtil::validate_read_file($file, $rnd);
+            $out .= __('Read OK, ', 'oss-upload');
+
+            OSSUtil::validate_delete_file($file);
+            $out .= __('Delete OK', 'oss-upload');
         }catch(Exception $ex){
-            $out = esc_html($ex->message);
+            $style_class = "error";
+            $out .= esc_html($ex->getMessage());
         }
-        if(isset($out)) echo '<div class="'. ($ok ? 'updated fade' : 'error') . '"><p>'.$out.'</p></div>';
+        echo '<div class="'. $style_class . '"><p>'.$out.'</p></div>';
     }
     if(isset($_SESSION['oss_upload_error'])){
         echo '<div class="error"><p>'.$_SESSION['oss_upload_error'].'</p></div>';
