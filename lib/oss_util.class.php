@@ -360,10 +360,8 @@ class OSSUtil
             if ($read_length <= 0) {
                 break;
             }
-            else {
-                $data .= fread($fh, $read_length);
-                $left_length = $left_length - $read_length;
-            }
+            $data .= fread($fh, $read_length);
+            $left_length = $left_length - $read_length;
         }
         fclose($fh);
         $content_md5 = base64_encode(md5($data, true));
