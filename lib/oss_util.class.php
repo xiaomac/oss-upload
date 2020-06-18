@@ -393,6 +393,7 @@ class OSSUtil
     /**
      * 转换响应
      * @param $response
+     * @param string $format
      * @return array
      * @throws Exception
      */
@@ -409,7 +410,7 @@ class OSSUtil
                 $body = empty($body) ? $body : json_encode(XML2Array::createArray($body));
                 break;
             default:
-                break;
+                return $response;
         }
 
         return array(
@@ -418,7 +419,6 @@ class OSSUtil
             'header' => $headers,
             'body' => $body
         );
-        return $response;
     }
 
     /**
