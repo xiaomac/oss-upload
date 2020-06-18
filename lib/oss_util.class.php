@@ -420,4 +420,39 @@ class OSSUtil
         );
         return $response;
     }
+
+    /**
+     * @param $file string path of the file to validate
+     * @throws RequestCore_Exception
+     */
+    public static function validate_delete_file($file) {
+        $try = unlink($file);
+        if ($try == false) {
+            throw new RequestCore_Exception(__('Delete Error: ', 'oss-upload') . $try);
+        }
+    }
+
+    /**
+     * @param $file string path of the file to validate
+     * @param $expected_content string expected content
+     * @throws RequestCore_Exception
+     */
+    public static function validate_read_file($file, $expected_content) {
+        $try = file_get_contents($file);
+        if ($try !== $expected_content) {
+            throw new RequestCore_Exception(__('Read Error: ', 'oss-upload') . $try);
+        }
+    }
+
+    /**
+     * @param $file string path of the file to validate
+     * @param $expected_content string expected content
+     * @throws RequestCore_Exception
+     */
+    public static function validate_write_file($file, $expected_content) {
+        $try = file_put_contents($file, $expected_content);
+        if ($try !== strlen($expected_content)) {
+            throw new RequestCore_Exception(__('Write Error: ', 'oss-upload') . $try);
+        }
+    }
 }
