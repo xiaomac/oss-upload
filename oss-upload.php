@@ -36,7 +36,8 @@ function oss_upload_dir_loader(){
 function oss_upload_check_handle(){
     if(!defined('OSS_ACCESS_ID')) return false;
     $action = isset($_GET['action']) ? $_GET['action'] : (isset($_POST['action']) ? $_POST['action'] : '');
-    return in_array($action, array('upload-plugin', 'upload-theme')) ? false : true;
+    $exclude = apply_filters( 'oss_upload_check_handle', array( 'upload-plugin', 'upload-theme' ) );
+    return in_array($action, $exclude) ? false : true;
 }
 
 function oss_upload_encode($str){
