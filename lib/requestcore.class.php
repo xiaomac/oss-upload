@@ -769,8 +769,9 @@ class RequestCore
 		}
 
 		// As long as this came back as a valid resource...
-		if (is_resource($this->curl_handle))
-		{
+		//if (is_resource($this->curl_handle))
+        if (is_resource($curl_handle) || $curl_handle instanceof \CurlHandle)
+        {
 			// Determine what's what.
 			$header_size = curl_getinfo($this->curl_handle, CURLINFO_HEADER_SIZE);
 			$this->response_headers = substr($this->response, 0, $header_size);
